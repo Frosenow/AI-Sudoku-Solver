@@ -2,7 +2,7 @@
   "name": "ai-sudoku-solver",
   "version": "1.0.0",
   "description": "Sudoku Solver created using image processing and machine learning algorithms ",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js"
   },
@@ -10,7 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "ejs": "^3.1.9",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.21"

@@ -1,9 +1,11 @@
 const express = require('express')
+const fileUpload = require('express-fileupload')
 
 // Default setup 
 const app = express()
 app.use(express.static("public"))
-app.use(express.urlencoded({extended: true}))
+app.use(fileUpload())
+// app.use(express.urlencoded({extended: true}))
 
 // Setting view rendering engine 
 app.set("view engine", "ejs")
@@ -20,4 +22,26 @@ app.listen(PORT, () => {
 app.get('/', (req, res) => {
     res.render('index.ejs')
 })
+
+// Handle the image upload
+app.post('/upload', (req, res) => {
+    const {image} = req.files
+
+    // If no image submitted, exit
+    if (!image) return res.sendStatus(400);
+     
+    // Getting image data 
+    let data = req.files.data
+    
+    // Place for image processing algorithms 
+    // .
+    // .
+    // .
+
+
+    // // Move the image to  upload folder
+    // image.mv(__dirname + '/upload/' + image.name);
+    res.sendStatus(200)
+})
+
 
