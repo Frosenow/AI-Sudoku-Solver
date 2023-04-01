@@ -1,5 +1,7 @@
 const express = require('express')
 const fileUpload = require('express-fileupload')
+const { convertToGrayscale } = require('./imageProcessing/greyscale')
+const jimp = require('jimp')
 
 // Default setup 
 const app = express()
@@ -29,17 +31,16 @@ app.post('/upload', (req, res) => {
 
     // If no image submitted, exit
     if (!image) return res.sendStatus(400);
-     
-    // Getting image data 
-    let data = req.files.data
     
+    // Getting image data 
     // Place for image processing algorithms 
     // .
     // .
     // .
+    convertToGrayscale(image.data) 
 
 
-    // // Move the image to  upload folder
+    // Move the image to  upload folder
     // image.mv(__dirname + '/upload/' + image.name);
     res.sendStatus(200)
 })
