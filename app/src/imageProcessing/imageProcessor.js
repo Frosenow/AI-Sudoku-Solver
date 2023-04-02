@@ -1,1 +1,1 @@
-import convertGrayscale from './imageProcessing/greyscale'
+import convertGrayscale from "./imageProcessing/greyscale";
