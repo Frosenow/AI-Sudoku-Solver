@@ -1,11 +1,11 @@
 const express = require('express')
 const fileUpload = require('express-fileupload')
-const { convertToGrayscale } = require('./imageProcessing/greyscale')
-const jimp = require('jimp')
+const { convertToGrayscale } = require('../dist/greyscale')
+
 
 // Default setup 
 const app = express()
-app.use(express.static("/public"))
+app.use(express.static("../public"))
 app.use(fileUpload())
 // app.use(express.urlencoded({extended: true}))
 

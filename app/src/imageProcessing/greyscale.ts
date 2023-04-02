@@ -1,9 +1,8 @@
-// PRZEPISAC NA TYPESCRIPT'A (!)
 const { createCanvas, loadImage } = require('canvas')
 const fs = require('fs')
 
 
-async function convertToGrayscale(rawImageData){
+async function convertToGrayscale(rawImageData: Buffer){
     const image = await loadImage(rawImageData);
     const canvas = createCanvas(image.width, image.height);
     const context = canvas.getContext('2d')
