@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/normalize.css">
-    <link rel="stylesheet" href="../css/style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/normalize.css" />
+    <link rel="stylesheet" href="../css/style.css" />
     <title>AI Sudoku Solver</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Sudoku Solver</h1>
-    <form action="/upload" method="POST" enctype="multipart/form-data">
-        <input type="file" name="image" />
-        <button type="submit">Upload</button>
-    </form>
-    <script type="text/javascript" src="../main.js"></script>
-</body>
+
+    <input type="file" name="image" id="upload-btn" />
+    <canvas id="canvas"></canvas>
+
+    <script type="text/javascript" src="main.js"></script>
+  </body>
 </html>

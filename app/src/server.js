@@ -4,9 +4,9 @@ const { convertToGrayscale } = require("../dist/greyscale");
 
 // Default setup
 const app = express();
-app.use(express.static("../public"));
+app.use(express.static("./public"));
 app.use(fileUpload());
-// app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({ extended: true }));
 
 // Setting view rendering engine
 app.set("view engine", "ejs");
