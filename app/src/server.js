@@ -1,5 +1,6 @@
 const express = require("express");
 const fileUpload = require("express-fileupload");
+const bodyParser = require("body-parser");
 const { convertToGrayscale } = require("../dist/greyscale");
 
 // Default setup
@@ -7,6 +8,7 @@ const app = express();
 app.use(express.static("./public"));
 app.use(fileUpload());
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: "10mb" }));
 
 // Setting view rendering engine
 app.set("view engine", "ejs");
@@ -25,20 +27,20 @@ app.get("/", (req, res) => {
 });
 
 // Handle the image upload
-app.post("/upload", (req, res) => {
-  const { image } = req.files;
+app.post("/uploads", (req, res) => {
+  const { image } = req.body;
 
   // If no image submitted, exit
-  if (!image) return res.sendStatus(400);
+  // if (!image) return res.sendStatus(400);
 
-  // Getting image data
-  // Place for image processing algorithms
-  // .
-  // .
-  // .
-  convertToGrayscale(image.data);
+  // // Getting image data
+  // // Place for image processing algorithms
+  // // .
+  // // .
+  // // .
+  // convertToGrayscale(image.data);
 
-  // Move the image to  upload folder
-  // image.mv(__dirname + '/upload/' + image.name);
-  res.sendStatus(200);
+  // // Move the image to  upload folder
+  // // image.mv(__dirname + '/upload/' + image.name);
+  // res.sendStatus(200);
 });

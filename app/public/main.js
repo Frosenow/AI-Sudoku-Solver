@@ -12,6 +12,8 @@ function uploadImage() {
   imgObj.src = URL.createObjectURL(image);
   imgObj.onload = () => {
     // Set canvas to image image width and size
+    // TODO: Calculate ratio to scale image
+    // Because now image size is to big
     canvas.width = imgObj.naturalWidth;
     canvas.height = imgObj.naturalHeight;
 
@@ -19,9 +21,21 @@ function uploadImage() {
     ctx.drawImage(imgObj, 0, 0);
 
     // Encode image to Base64
-    const dataURL = canvas.toDataURL();
+    const Base64Image = canvas.toDataURL();
 
     // Send encoded image to server
-    console.log(dataURL);
+    fetch("/uploads", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ image: Base64Image }),
+    })
+      .then((response) => {
+        // Handle response
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 }
