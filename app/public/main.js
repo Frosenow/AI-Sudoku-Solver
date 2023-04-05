@@ -12,6 +12,8 @@ function uploadImage() {
   imgObj.src = URL.createObjectURL(image);
   imgObj.onload = () => {
     ctx.drawImage(imgObj, 0, 0);
+    const dataURL = canvas.toDataURL();
+    // send URL to server
+    console.log(dataURL);
   };
-  // Send imgObj to server and use in image processing algorithms
 }
