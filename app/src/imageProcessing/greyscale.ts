@@ -1,6 +1,6 @@
 const fs = require("fs");
 const canvas = require("canvas");
-import { getImageData } from "./getImageData";
+import { saveImageLocally } from "./ImageInterface";
 
 interface ImageData {
   data: Uint8ClampedArray;
@@ -19,16 +19,7 @@ async function convertToGrayscale(imageData: ImageData) {
     data[i + 1] = luminance;
     data[i + 2] = luminance;
   }
-
-  const canvasObj = canvas.createCanvas(imageData.width, imageData.height);
-  const ctx = canvasObj.getContext("2d");
-  const newImageData = ctx.createImageData(imageData.width, imageData.height);
-  newImageData.data.set(data);
-  ctx.putImageData(newImageData, 0, 0);
-
-  const out = fs.createWriteStream("output.png");
-  const stream = canvasObj.createPNGStream();
-  stream.pipe(out);
+  saveImageLocally(imageData, data);
 }
 
 module.exports = { convertToGrayscale };

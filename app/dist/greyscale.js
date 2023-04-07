@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
 const canvas = require("canvas");
+const ImageInterface_1 = require("./ImageInterface");
 async function convertToGrayscale(imageData) {
     const data = imageData.data;
     for (let i = 0; i < data.length; i += 4) {
@@ -13,14 +14,7 @@ async function convertToGrayscale(imageData) {
         data[i + 1] = luminance;
         data[i + 2] = luminance;
     }
-    const canvasObj = canvas.createCanvas(imageData.width, imageData.height);
-    const ctx = canvasObj.getContext("2d");
-    const newImageData = ctx.createImageData(imageData.width, imageData.height);
-    newImageData.data.set(data);
-    ctx.putImageData(newImageData, 0, 0);
-    const out = fs.createWriteStream("output.png");
-    const stream = canvasObj.createPNGStream();
-    stream.pipe(out);
+    (0, ImageInterface_1.saveImageLocally)(imageData, data);
 }
 module.exports = { convertToGrayscale };
 //# sourceMappingURL=greyscale.js.map
