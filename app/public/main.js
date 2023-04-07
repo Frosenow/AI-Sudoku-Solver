@@ -14,11 +14,13 @@ function uploadImage() {
     // Set canvas to image image width and size
     // TODO: Calculate ratio to scale image
     // Because now image size is to big
-    canvas.width = imgObj.naturalWidth;
-    canvas.height = imgObj.naturalHeight;
+    const aspectRatio = imgObj.naturalWidth / imgObj.naturalHeight;
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvasWidth / aspectRatio;
+    canvas.height = canvasHeight;
 
     // Draw image on website using canvas
-    ctx.drawImage(imgObj, 0, 0);
+    ctx.drawImage(imgObj, 0, 0, canvasWidth, canvasHeight);
 
     // Encode image to Base64
     const Base64Image = canvas.toDataURL();
