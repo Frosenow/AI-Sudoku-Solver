@@ -11,21 +11,6 @@ export default class ImageInterface {
     this.height = height;
   }
 
-  convertToData(): ImageData {
-    const imageData = new ImageData(this.width, this.height);
-    for (let y = 0; y < this.height; y++) {
-      const row = y * this.width;
-      for (let x = 0; x < this.width; x++) {
-        const value = this.bytes[row + x];
-        imageData.data[(row + x) * 4] = value;
-        imageData.data[(row + x) * 4 + 1] = value;
-        imageData.data[(row + x) * 4 + 2] = value;
-        imageData.data[(row + x) * 4 + 3] = 255;
-      }
-    }
-    return imageData;
-  }
-
   saveImageLocally(
     dataToSave: Uint8ClampedArray,
     outputFilename: string

@@ -2,7 +2,9 @@ const fs = require("fs");
 const canvas = require("canvas");
 import ImageInterface from "./ImageInterface";
 
-async function convertToGrayscale(imageData: ImageData) {
+async function convertToGrayscale(
+  imageData: ImageData
+): Promise<ImageInterface> {
   const data = imageData.data;
 
   for (let i = 0; i < data.length; i += 4) {
@@ -16,7 +18,7 @@ async function convertToGrayscale(imageData: ImageData) {
     data[i + 2] = luminance;
   }
   const output = new ImageInterface(data, imageData.width, imageData.height);
-  output.saveImageLocally(data, "test.png");
+  return output;
 }
 
 module.exports = { convertToGrayscale };

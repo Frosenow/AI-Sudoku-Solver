@@ -19,7 +19,7 @@ async function convertToGrayscale(imageData) {
         data[i + 2] = luminance;
     }
     const output = new ImageInterface_1.default(data, imageData.width, imageData.height);
-    output.saveImageLocally(data, "test.png");
+    return output;
 }
 module.exports = { convertToGrayscale };
 //# sourceMappingURL=greyscale.js.map

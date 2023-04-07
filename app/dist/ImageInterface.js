@@ -8,20 +8,6 @@ class ImageInterface {
         this.width = width;
         this.height = height;
     }
-    convertToData() {
-        const imageData = new ImageData(this.width, this.height);
-        for (let y = 0; y < this.height; y++) {
-            const row = y * this.width;
-            for (let x = 0; x < this.width; x++) {
-                const value = this.bytes[row + x];
-                imageData.data[(row + x) * 4] = value;
-                imageData.data[(row + x) * 4 + 1] = value;
-                imageData.data[(row + x) * 4 + 2] = value;
-                imageData.data[(row + x) * 4 + 3] = 255;
-            }
-        }
-        return imageData;
-    }
     saveImageLocally(dataToSave, outputFilename) {
         const canvasObj = canvas.createCanvas(this.width, this.height);
         const ctx = canvasObj.getContext("2d");
