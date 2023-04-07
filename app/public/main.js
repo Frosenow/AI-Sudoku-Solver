@@ -12,8 +12,6 @@ function uploadImage() {
   imgObj.src = URL.createObjectURL(image);
   imgObj.onload = () => {
     // Set canvas to image image width and size
-    // TODO: Calculate ratio to scale image
-    // Because now image size is to big
     const aspectRatio = imgObj.naturalWidth / imgObj.naturalHeight;
     const canvasWidth = canvas.width;
     const canvasHeight = canvasWidth / aspectRatio;
@@ -31,7 +29,7 @@ function uploadImage() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ image: Base64Image }),
+      body: JSON.stringify({ baseString: Base64Image }),
     })
       .then((response) => {
         // Handle response

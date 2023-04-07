@@ -1,15 +1,13 @@
 "use strict";
-const { createCanvas, loadImage } = require("canvas");
+Object.defineProperty(exports, "__esModule", { value: true });
 const fs = require("fs");
-async function convertToGrayscale(rawImageData) {
-    const image = await loadImage(rawImageData);
-    const canvas = createCanvas(image.width, image.height);
-    const context = canvas.getContext("2d");
-    context.drawImage(image, 0, 0);
-    const width = canvas.width;
-    const height = canvas.height;
-    const imageData = context.getImageData(0, 0, width, height);
-    const bytes = new Uint8ClampedArray(width * height);
+const canvas = require("canvas");
+const getImageData_1 = require("./getImageData");
+async function convertToGrayscale(base64Image) {
+    const imageData = await (0, getImageData_1.getImageData)(base64Image);
+    const bytes = new Uint8ClampedArray(imageData.data.length);
+    const height = imageData.height;
+    const width = imageData.width;
     for (let y = 0; y < height; y++) {
         const row = y * width;
         for (let x = 0; x < width; x++) {
@@ -18,14 +16,6 @@ async function convertToGrayscale(rawImageData) {
             bytes[row + x] = g;
         }
     }
-    // Create a new canvas with the grayscale image data
-    const grayscaleImageData = context.createImageData(width, height);
-    grayscaleImageData.data.set(bytes);
-    context.putImageData(grayscaleImageData, 0, 0);
-    // Save the grayscale image as a new file
-    const stream = fs.createWriteStream("grayscale.png");
-    const pngStream = canvas.createPNGStream();
-    pngStream.pipe(stream);
 }
 module.exports = { convertToGrayscale };
 //# sourceMappingURL=greyscale.js.map

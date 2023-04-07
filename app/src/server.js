@@ -28,17 +28,12 @@ app.get("/", (req, res) => {
 
 // Handle the image upload
 app.post("/uploads", (req, res) => {
-  const { image } = req.body;
-
+  const image = req.body;
   // If no image submitted, exit
-  // if (!image) return res.sendStatus(400);
+  if (!image) return res.sendStatus(400);
 
-  // // Getting image data
-  // // Place for image processing algorithms
-  // // .
-  // // .
-  // // .
-  // convertToGrayscale(image.data);
+  // Image processing algorithms
+  convertToGrayscale(image.baseString);
 
   // // Move the image to  upload folder
   // // image.mv(__dirname + '/upload/' + image.name);
