@@ -20,16 +20,21 @@ function uploadImage() {
     // Draw image on website using canvas
     ctx.drawImage(imgObj, 0, 0, canvasWidth, canvasHeight);
 
-    // Encode image to Base64
-    const Base64Image = canvas.toDataURL();
+    // Convert to Uint8ClampedArray and send to server
+    const imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
 
+    const metadata = {
+      width: imageData.width,
+      height: imageData.height,
+    };
+
+    const formData = new FormData();
+    formData.append("metadata", JSON.stringify(metadata));
+    formData.append("data", new Blob([imageData.data.buffer]));
     // Send encoded image to server
     fetch("/uploads", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ baseString: Base64Image }),
+      body: formData,
     })
       .then((response) => {
         // Handle response

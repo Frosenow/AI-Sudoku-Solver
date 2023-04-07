@@ -1,14 +1,15 @@
 const express = require("express");
-const fileUpload = require("express-fileupload");
+const fs = require("fs");
 const bodyParser = require("body-parser");
+const multer = require("multer");
 const { convertToGrayscale } = require("../dist/greyscale");
 
 // Default setup
 const app = express();
 app.use(express.static("./public"));
-app.use(fileUpload());
-app.use(express.urlencoded({ extended: true }));
-app.use(bodyParser.json({ limit: "10mb" }));
+app.use(bodyParser.json({ limit: "20mb" }));
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 // Setting view rendering engine
 app.set("view engine", "ejs");
@@ -27,13 +28,14 @@ app.get("/", (req, res) => {
 });
 
 // Handle the image upload
-app.post("/uploads", (req, res) => {
-  const image = req.body;
+app.post("/uploads", upload.single("data"), (req, res) => {
+  const metadata = JSON.parse(req.body.metadata);
+  const imageData = new Uint8ClampedArray(req.file.buffer);
+  console.log(imageData);
   // If no image submitted, exit
-  if (!image) return res.sendStatus(400);
+  // if (!image) return res.sendStatus(400);
 
-  // Image processing algorithms
-  convertToGrayscale(image.baseString);
+  // // Image processing algorithms
 
   // // Move the image to  upload folder
   // // image.mv(__dirname + '/upload/' + image.name);
