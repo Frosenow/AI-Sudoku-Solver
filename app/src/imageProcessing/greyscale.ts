@@ -2,37 +2,33 @@ const fs = require("fs");
 const canvas = require("canvas");
 import { getImageData } from "./getImageData";
 
-async function convertToGrayscale(base64Image: string) {
-  const imageData = await getImageData(base64Image);
+interface ImageData {
+  data: Uint8ClampedArray;
+  width: number;
+  height: number;
+}
 
-  const height = imageData.height;
-  const width = imageData.width;
-
-  const bytes = new Uint8ClampedArray(width * height);
-
-  for (let y = 0; y < height; y++) {
-    const row = y * width;
-    for (let x = 0; x < width; x++) {
-      // Green Channel
-      const g = imageData.data[(row + x) * 4 + 1];
-      bytes[row + x] = g;
-    }
+async function convertToGrayscale(imageData: ImageData) {
+  const data = imageData.data;
+  for (let i = 0; i < data.length; i += 4) {
+    const r = data[i];
+    const g = data[i + 1];
+    const b = data[i + 2];
+    const luminance = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
+    data[i] = luminance;
+    data[i + 1] = luminance;
+    data[i + 2] = luminance;
   }
-  // create a new canvas
-  const canvasObj = canvas.createCanvas(width, height);
-  const context = canvasObj.getContext("2d");
 
-  // create a new ImageData object from the bytes array
-  const imageDataObj = new canvas.ImageData(bytes, width, height);
+  const canvasObj = canvas.createCanvas(imageData.width, imageData.height);
+  const ctx = canvasObj.getContext("2d");
+  const newImageData = ctx.createImageData(imageData.width, imageData.height);
+  newImageData.data.set(data);
+  ctx.putImageData(newImageData, 0, 0);
 
-  // put the ImageData object onto the canvas
-  context.putImageData(imageDataObj, 0, 0);
-
-  // get the base64 data URL of the canvas
-  const base64Data = canvasObj.toDataURL();
-  // fs.writeFile("outpunt.txt", test, (err: any) => {
-  //   console.log("saved");
-  // });
+  const out = fs.createWriteStream("output.png");
+  const stream = canvasObj.createPNGStream();
+  stream.pipe(out);
 }
 
 module.exports = { convertToGrayscale };

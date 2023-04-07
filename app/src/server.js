@@ -8,6 +8,8 @@ const { convertToGrayscale } = require("../dist/greyscale");
 const app = express();
 app.use(express.static("./public"));
 app.use(bodyParser.json({ limit: "20mb" }));
+
+// Middleware to handle files uploads using Multer
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
@@ -30,14 +32,18 @@ app.get("/", (req, res) => {
 // Handle the image upload
 app.post("/uploads", upload.single("data"), (req, res) => {
   const metadata = JSON.parse(req.body.metadata);
+  // Converting buffer to Uint8ClampedArray
   const imageData = new Uint8ClampedArray(req.file.buffer);
-  console.log(imageData);
   // If no image submitted, exit
-  // if (!image) return res.sendStatus(400);
+  if (!req.file) return res.sendStatus(400);
 
-  // // Image processing algorithms
+  const imageObject = {
+    data: imageData,
+    width: metadata.width,
+    height: metadata.height,
+  };
 
-  // // Move the image to  upload folder
-  // // image.mv(__dirname + '/upload/' + image.name);
+  // Image processing algorithms
+  convertToGrayscale(imageObject);
   // res.sendStatus(200);
 });
