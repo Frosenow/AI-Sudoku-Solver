@@ -18,6 +18,20 @@ class ImageInterface {
         const stream = canvasObj.createPNGStream();
         stream.pipe(out);
     }
+    toImageData() {
+        const imageData = new canvas.ImageData(this.width, this.height);
+        for (let y = 0; y < this.height; y++) {
+            const row = y * this.width;
+            for (let x = 0; x < this.width; x++) {
+                const value = this.bytes[row + x];
+                imageData.data[(row + x) * 4] = value;
+                imageData.data[(row + x) * 4 + 1] = value;
+                imageData.data[(row + x) * 4 + 2] = value;
+                imageData.data[(row + x) * 4 + 3] = 255;
+            }
+        }
+        return imageData;
+    }
 }
 exports.default = ImageInterface;
 //# sourceMappingURL=ImageInterface.js.map

@@ -1,47 +1,53 @@
 import ImageInterface from "./ImageInterface";
 
-function boxBlur(image: ImageInterface, radius: number): ImageInterface {
-  const pixels = image.bytes;
-  const width = image.width;
-  const height = image.height;
-  const output = new Uint8ClampedArray(pixels.length);
-
+function precompute(bytes: Uint8ClampedArray, width: number, height: number): number[] {
+  const result: number[] = new Array(bytes.length);
+  let dst = 0;
+  let src = 0;
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
-      let r = 0;
-      let g = 0;
-      let b = 0;
-      let a = 0;
-      let count = 0;
-
-      for (let j = -radius; j <= radius; j++) {
-        for (let i = -radius; i <= radius; i++) {
-          const x0 = x + i;
-          const y0 = y + j;
-
-          if (x0 >= 0 && x0 < width && y0 >= 0 && y0 < height) {
-            const index = (y0 * width + x0) * 4;
-
-            r += pixels[index];
-            g += pixels[index + 1];
-            b += pixels[index + 2];
-            a += pixels[index + 3];
-            count++;
-          }
-        }
-      }
-
-      const outputIndex = (y * width + x) * 4;
-      output[outputIndex] = Math.floor(r / count);
-      output[outputIndex + 1] = Math.floor(g / count);
-      output[outputIndex + 2] = Math.floor(b / count);
-      output[outputIndex + 3] = Math.floor(a / count);
+      let tot = bytes[src];
+      if (x > 0) tot += result[dst - 1];
+      if (y > 0) tot += result[dst - width];
+      if (x > 0 && y > 0) tot -= result[dst - width - 1];
+      result[dst] = tot;
+      dst++;
+      src++;
     }
   }
-
-  const result = new ImageInterface(output, width, height);
-  result.saveImageLocally(result.bytes, "blurred.png");
   return result;
+}
+
+// this is a utility function used by DoBoxBlur below
+function readP(precomputed: number[], w: number, h: number, x: number, y: number): number {
+  if (x < 0) x = 0;
+  else if (x >= w) x = w - 1;
+  if (y < 0) y = 0;
+  else if (y >= h) y = h - 1;
+  return precomputed[x + y * w];
+}
+
+export default function boxBlur(src: ImageInterface, boxw: number, boxh: number): ImageInterface {
+  const { width, height, bytes } = src;
+  const precomputed = precompute(bytes, width, height);
+  const result = new Uint8ClampedArray(width * height);
+  let dst = 0;
+  const mul = 1.0 / ((boxw * 2 + 1) * (boxh * 2 + 1));
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const tot =
+        readP(precomputed, width, height, x + boxw, y + boxh) +
+        readP(precomputed, width, height, x - boxw, y - boxh) -
+        readP(precomputed, width, height, x - boxw, y + boxh) -
+        readP(precomputed, width, height, x + boxw, y - boxh);
+      result[dst] = tot * mul;
+      dst++;
+    }
+  }
+  const output = new ImageInterface(result, width, height);
+  const imageData = output.toImageData();
+  output.saveImageLocally(imageData.data, "blur2.png");
+  return output;
 }
 
 module.exports = { boxBlur };

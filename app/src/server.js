@@ -48,7 +48,7 @@ app.post("/uploads", async (req, res) => {
   // Image processing algorithms
   async function Process() {
     const grayscaleImg = await convertToGrayscale(imageObject);
-    const bluerd = boxBlur(grayscaleImg, 10);
+    const boxblur = boxBlur(grayscaleImg, 20, 20);
   }
   Process();
 
