@@ -2,8 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const canvas = require("canvas");
 const bodyParser = require("body-parser");
-const { convertToGrayscale } = require("../dist/greyscale");
-const { boxBlur } = require("../dist/boxblur");
+const { processor } = require("../dist/imageProcessor");
 
 // Default setup
 const app = express();
@@ -46,11 +45,13 @@ app.post("/uploads", async (req, res) => {
   };
 
   // Image processing algorithms
-  async function Process() {
-    const grayscaleImg = await convertToGrayscale(imageObject);
-    const boxblur = boxBlur(grayscaleImg, 20, 20);
-  }
-  Process();
+  processor(imageObject);
+  // async function Process() {
+  //   const grayscaleImg = await convertToGrayscale(imageObject);
+  //   const boxblur = boxBlur(grayscaleImg, 20, 20);
+  //   const thresholded = adaptiveThreshold(grayscaleImg, 20, 20);
+  // }
+  // Process();
 
   // res.sendStatus(200);
 });

@@ -1,0 +1,17 @@
+import ImageInterface from "./ImageInterface";
+import boxBlur from "./boxblur";
+
+export default function adaptiveThreshold(image: ImageInterface, threshold: number, blurSize: number): ImageInterface {
+  const { width, height, bytes } = image;
+  const blurred = boxBlur(image, blurSize, blurSize);
+  const blurredBytes = blurred.bytes;
+  for (let y = 0; y < height; y++) {
+    const row = y * width;
+    for (let x = 0; x < width; x++) {
+      bytes[row + width + x] = blurredBytes[row + x] - bytes[row + width + x] > threshold ? 255 : 0;
+    }
+  }
+  const test = image.toImageData();
+  image.saveImageLocally(test.data, "threshold.png");
+  return image;
+}

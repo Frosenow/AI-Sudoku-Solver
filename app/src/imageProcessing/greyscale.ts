@@ -1,6 +1,6 @@
 import ImageInterface from "./ImageInterface";
 
-async function convertToGrayscale(imageData: ImageData): Promise<ImageInterface> {
+export default async function convertToGrayscale(imageData: ImageData): Promise<ImageInterface> {
   const data = imageData.data;
   const width = imageData.width;
   const height = imageData.height;
@@ -16,5 +16,3 @@ async function convertToGrayscale(imageData: ImageData): Promise<ImageInterface>
   const output = new ImageInterface(bytes, width, height);
   return output;
 }
-
-module.exports = { convertToGrayscale };

@@ -45,9 +45,5 @@ export default function boxBlur(src: ImageInterface, boxw: number, boxh: number)
     }
   }
   const output = new ImageInterface(result, width, height);
-  const imageData = output.toImageData();
-  output.saveImageLocally(imageData.data, "blur2.png");
   return output;
 }
-
-module.exports = { boxBlur };

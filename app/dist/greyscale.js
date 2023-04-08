@@ -19,5 +19,5 @@ async function convertToGrayscale(imageData) {
     const output = new ImageInterface_1.default(bytes, width, height);
     return output;
 }
-module.exports = { convertToGrayscale };
+exports.default = convertToGrayscale;
 //# sourceMappingURL=greyscale.js.map
