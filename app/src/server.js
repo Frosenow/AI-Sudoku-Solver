@@ -1,17 +1,14 @@
 const express = require("express");
 const fs = require("fs");
+const canvas = require("canvas");
 const bodyParser = require("body-parser");
-const multer = require("multer");
 const { convertToGrayscale } = require("../dist/greyscale");
+const { boxBlur } = require("../dist/boxblur");
 
 // Default setup
 const app = express();
 app.use(express.static("./public"));
 app.use(bodyParser.json({ limit: "20mb" }));
-
-// Middleware to handle files uploads using Multer
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
 
 // Setting view rendering engine
 app.set("view engine", "ejs");
@@ -30,20 +27,30 @@ app.get("/", (req, res) => {
 });
 
 // Handle the image upload
-app.post("/uploads", upload.single("data"), (req, res) => {
-  const metadata = JSON.parse(req.body.metadata);
-  // Converting buffer to Uint8ClampedArray
-  const imageData = new Uint8ClampedArray(req.file.buffer);
+app.post("/uploads", async (req, res) => {
   // If no image submitted, exit
-  if (!req.file) return res.sendStatus(400);
+  // if (!req.file) return res.sendStatus(400);
 
+  const { dataURL, width, height } = req.body;
+
+  const img = await canvas.loadImage(dataURL);
+  const canvasObj = canvas.createCanvas(width, height);
+  const ctx = canvasObj.getContext("2d");
+
+  ctx.drawImage(img, 0, 0);
+  const imageData = ctx.getImageData(0, 0, width, height);
   const imageObject = {
-    data: imageData,
-    width: metadata.width,
-    height: metadata.height,
+    data: imageData.data,
+    width: width,
+    height: height,
   };
 
   // Image processing algorithms
-  convertToGrayscale(imageObject);
+  async function Process() {
+    const grayscaleImg = await convertToGrayscale(imageObject);
+    const bluerd = boxBlur(grayscaleImg, 10);
+  }
+  Process();
+
   // res.sendStatus(200);
 });

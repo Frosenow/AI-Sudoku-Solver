@@ -1,23 +1,23 @@
-const fs = require("fs");
-const canvas = require("canvas");
 import ImageInterface from "./ImageInterface";
 
-async function convertToGrayscale(
-  imageData: ImageData
-): Promise<ImageInterface> {
+async function convertToGrayscale(imageData: ImageData): Promise<ImageInterface> {
   const data = imageData.data;
+  const width = imageData.width;
+  const height = imageData.height;
 
-  for (let i = 0; i < data.length; i += 4) {
-    const r = data[i];
-    const g = data[i + 1];
-    const b = data[i + 2];
-    // Calculate luminance using different weighting of the color channels
-    const luminance = Math.round(0.299 * r + 0.587 * g + 0.114 * b);
-    data[i] = luminance;
-    data[i + 1] = luminance;
-    data[i + 2] = luminance;
+  const bytes = new Uint8ClampedArray(width * height * 4);
+  for (let y = 0; y < height; y++) {
+    const row = y * width;
+    for (let x = 0; x < width; x++) {
+      const g = imageData.data[(row + x) * 4 + 1];
+      bytes[(row + x) * 4] = g;
+      bytes[(row + x) * 4 + 1] = g;
+      bytes[(row + x) * 4 + 2] = g;
+      bytes[(row + x) * 4 + 3] = 255;
+    }
   }
-  const output = new ImageInterface(data, imageData.width, imageData.height);
+  const output = new ImageInterface(bytes, width, height);
+  output.saveImageLocally(output.bytes, "test.png");
   return output;
 }
 

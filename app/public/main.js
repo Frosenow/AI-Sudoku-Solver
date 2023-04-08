@@ -10,31 +10,26 @@ function uploadImage() {
   const imgObj = new Image();
 
   imgObj.src = URL.createObjectURL(image);
-  imgObj.onload = () => {
+  imgObj.onload = async () => {
     // Set canvas to image image width and size
-    const aspectRatio = imgObj.naturalWidth / imgObj.naturalHeight;
-    const canvasWidth = canvas.width;
-    const canvasHeight = canvasWidth / aspectRatio;
-    canvas.height = canvasHeight;
+    // const aspectRatio = 1;
+    // const canvasWidth = canvas.width;
+    // const canvasHeight = canvasWidth / aspectRatio;
+    // canvas.height = canvasHeight;
+    canvas.width = imgObj.naturalWidth;
+    canvas.height = imgObj.naturalHeight;
 
     // Draw image on website using canvas
-    ctx.drawImage(imgObj, 0, 0, canvasWidth, canvasHeight);
+    ctx.drawImage(imgObj, 0, 0, canvas.width, canvas.height);
+    const dataURL = canvas.toDataURL("image/png");
 
-    // Convert to Uint8ClampedArray and send to server
-    const imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-
-    const metadata = {
-      width: imageData.width,
-      height: imageData.height,
-    };
-
-    const formData = new FormData();
-    formData.append("metadata", JSON.stringify(metadata));
-    formData.append("data", new Blob([imageData.data.buffer]));
     // Send encoded image to server
     fetch("/uploads", {
       method: "POST",
-      body: formData,
+      body: JSON.stringify({ dataURL: dataURL, width: canvas.width, height: canvas.height }),
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
       .then((response) => {
         // Handle response
