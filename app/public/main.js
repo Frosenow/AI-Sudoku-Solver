@@ -11,11 +11,6 @@ function uploadImage() {
 
   imgObj.src = URL.createObjectURL(image);
   imgObj.onload = async () => {
-    // Set canvas to image image width and size
-    // const aspectRatio = 1;
-    // const canvasWidth = canvas.width;
-    // const canvasHeight = canvasWidth / aspectRatio;
-    // canvas.height = canvasHeight;
     canvas.width = imgObj.naturalWidth;
     canvas.height = imgObj.naturalHeight;
 

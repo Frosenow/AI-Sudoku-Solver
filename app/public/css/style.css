@@ -1,3 +1,15 @@
 h1 {
   color: red;
 }
+
+#canvas {
+  display: block;
+  padding: 1rem;
+  width: 1280px;
+  height: 720px;
+  margin: 0 auto;
+}
+
+.container {
+  text-align: center;
+}
