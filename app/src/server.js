@@ -27,31 +27,22 @@ app.get("/", (req, res) => {
 
 // Handle the image upload
 app.post("/uploads", async (req, res) => {
-  // If no image submitted, exit
-  // if (!req.file) return res.sendStatus(400);
-
+  // Deconstruct image data
   const { dataURL, width, height } = req.body;
 
+  // load base64 image to canvas to get ImageData
   const img = await canvas.loadImage(dataURL);
   const canvasObj = canvas.createCanvas(width, height);
   const ctx = canvasObj.getContext("2d");
-
   ctx.drawImage(img, 0, 0);
   const imageData = ctx.getImageData(0, 0, width, height);
+
   const imageObject = {
     data: imageData.data,
     width: width,
     height: height,
   };
 
-  // Image processing algorithms
+  // Run image processing algorithms
   processor(imageObject);
-  // async function Process() {
-  //   const grayscaleImg = await convertToGrayscale(imageObject);
-  //   const boxblur = boxBlur(grayscaleImg, 20, 20);
-  //   const thresholded = adaptiveThreshold(grayscaleImg, 20, 20);
-  // }
-  // Process();
-
-  // res.sendStatus(200);
 });

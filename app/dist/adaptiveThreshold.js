@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const boxblur_1 = __importDefault(require("./boxblur"));
+// Binarization of an image using adaptive thresholding
 function adaptiveThreshold(image, threshold, blurSize) {
     const { width, height, bytes } = image;
     const blurred = (0, boxblur_1.default)(image, blurSize, blurSize);
@@ -11,6 +12,7 @@ function adaptiveThreshold(image, threshold, blurSize) {
     for (let y = 0; y < height; y++) {
         const row = y * width;
         for (let x = 0; x < width; x++) {
+            // Calculating difference between blurred pixel and regular pixel to get threshold value
             bytes[row + width + x] = blurredBytes[row + x] - bytes[row + width + x] > threshold ? 255 : 0;
         }
     }

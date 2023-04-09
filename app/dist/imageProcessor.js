@@ -8,7 +8,6 @@ const greyscale_1 = __importDefault(require("./greyscale"));
 const adaptiveThreshold_1 = __importDefault(require("./adaptiveThreshold"));
 async function processor(imageObject) {
     const grayscaleImg = await (0, greyscale_1.default)(imageObject);
-    //   const boxblur = boxBlur(grayscaleImg, 20, 20);
     const thresholded = (0, adaptiveThreshold_1.default)(grayscaleImg, 20, 20);
 }
 exports.processor = processor;

@@ -1,6 +1,5 @@
 const uploader = document.querySelector("#upload-btn");
 const canvas = document.querySelector("#canvas");
-
 const ctx = canvas.getContext("2d");
 
 uploader.addEventListener("change", uploadImage);
@@ -11,6 +10,7 @@ function uploadImage() {
 
   imgObj.src = URL.createObjectURL(image);
   imgObj.onload = async () => {
+    // Get image size
     canvas.width = imgObj.naturalWidth;
     canvas.height = imgObj.naturalHeight;
 
