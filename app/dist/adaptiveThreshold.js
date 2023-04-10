@@ -7,6 +7,7 @@ const boxblur_1 = __importDefault(require("./boxblur"));
 // Binarization of an image using adaptive thresholding
 function adaptiveThreshold(image, threshold, blurSize) {
     const { width, height, bytes } = image;
+    // Using blurred image to reduce noise and help with overexposed photos
     const blurred = (0, boxblur_1.default)(image, blurSize, blurSize);
     const blurredBytes = blurred.bytes;
     for (let y = 0; y < height; y++) {
@@ -16,8 +17,6 @@ function adaptiveThreshold(image, threshold, blurSize) {
             bytes[row + width + x] = blurredBytes[row + x] - bytes[row + width + x] > threshold ? 255 : 0;
         }
     }
-    const test = image.toImageData();
-    image.saveImageLocally(test.data, "threshold.png");
     return image;
 }
 exports.default = adaptiveThreshold;
