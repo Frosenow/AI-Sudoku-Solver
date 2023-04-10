@@ -8,6 +8,16 @@ export class Blob {
     this.points = points;
     this.bounds = { topLeft, bottomRight };
   }
+
+  get width() {
+    return this.bounds.bottomRight.x - this.bounds.topLeft.x;
+  }
+  get height() {
+    return this.bounds.bottomRight.y - this.bounds.topLeft.y;
+  }
+  get aspectRatio(): number {
+    return this.width / this.height;
+  }
 }
 
 // Interface for storing cordiantes
@@ -68,6 +78,7 @@ function findBlob(image: ImageInterface, x: number, y: number) {
   return new Blob(pixels, { x: minX, y: minY }, { x: maxX, y: maxY });
 }
 
+// Defines filtering criteria
 type BlobOptions = {
   minAspectRatio: number;
   maxAspectRatio: number;
@@ -79,5 +90,38 @@ type BlobOptions = {
 export default function getLargestBlog(binaryImage: ImageInterface, options: BlobOptions): Blob | null {
   let largestRegion: Blob | null = null;
 
-  const imgTmp = binaryImage.copy();
+  // Create copy of input image because we working on image reference
+  const imgTmp = binaryImage.copy;
+  const { width, height, bytes } = imgTmp;
+
+  for (let y = 0; y < height; y++) {
+    const row = y * width;
+    for (let x = 0; x < width; x++) {
+      // Check if current pixel is foreground
+      if (bytes[row + x] == 255) {
+        // Get the region that is connected to the pixel
+        const connectedRegion = findBlob(imgTmp, x, y);
+
+        // Compute the width and height of the connected region
+        const regionWidth = connectedRegion.bounds.bottomRight.x - connectedRegion.bounds.topLeft.x;
+        const regionHeight = connectedRegion.bounds.bottomRight.y - connectedRegion.bounds.topLeft.y;
+
+        // Check if the connected region satisfies the given filtering criteria (BloblOptions)
+        if (
+          connectedRegion.aspectRatio >= options.minAspectRatio &&
+          connectedRegion.aspectRatio <= options.maxAspectRatio &&
+          height >= options.minSize &&
+          height <= options.maxSize &&
+          width >= options.minSize &&
+          width <= options.minSize
+        ) {
+          // Update the largest region if the current region satisfies the filtering criteria and has more pixels than the current largest region.
+          if (!largestRegion || connectedRegion.points.length > largestRegion.points.length) {
+            largestRegion = connectedRegion;
+          }
+        }
+      }
+    }
+  }
+  return largestRegion;
 }
