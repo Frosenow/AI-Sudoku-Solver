@@ -14,6 +14,5 @@ export default function adaptiveThreshold(image: ImageInterface, threshold: numb
       bytes[row + width + x] = blurredBytes[row + x] - bytes[row + width + x] > threshold ? 255 : 0;
     }
   }
-
   return image;
 }

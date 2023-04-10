@@ -61,7 +61,7 @@ function findBlob(image, x, y) {
     return new Blob(pixels, { x: minX, y: minY }, { x: maxX, y: maxY });
 }
 // Find the largest blob in givern binary image
-function getLargestBlog(binaryImage, options) {
+function getLargestBlob(binaryImage, options) {
     let largestRegion = null;
     // Create copy of input image because we working on image reference
     const imgTmp = binaryImage.copy;
@@ -77,21 +77,26 @@ function getLargestBlog(binaryImage, options) {
                 const regionWidth = connectedRegion.bounds.bottomRight.x - connectedRegion.bounds.topLeft.x;
                 const regionHeight = connectedRegion.bounds.bottomRight.y - connectedRegion.bounds.topLeft.y;
                 // Check if the connected region satisfies the given filtering criteria (BloblOptions)
-                if (connectedRegion.aspectRatio >= options.minAspectRatio &&
+                const satisfiesFilters = connectedRegion.aspectRatio >= options.minAspectRatio &&
                     connectedRegion.aspectRatio <= options.maxAspectRatio &&
-                    height >= options.minSize &&
-                    height <= options.maxSize &&
-                    width >= options.minSize &&
-                    width <= options.minSize) {
+                    regionHeight >= options.minSize &&
+                    regionWidth >= options.minSize &&
+                    regionHeight <= options.maxSize &&
+                    regionWidth <= options.maxSize;
+                {
                     // Update the largest region if the current region satisfies the filtering criteria and has more pixels than the current largest region.
-                    if (!largestRegion || connectedRegion.points.length > largestRegion.points.length) {
+                    if (satisfiesFilters && (!largestRegion || connectedRegion.points.length > largestRegion.points.length)) {
                         largestRegion = connectedRegion;
                     }
                 }
             }
         }
     }
+    // Draw bounds on the biggest blob
+    const test = binaryImage.toImageData();
+    binaryImage.saveImageLocally(test.data, "test2.png", largestRegion);
+    console.log(largestRegion);
     return largestRegion;
 }
-exports.default = getLargestBlog;
+exports.default = getLargestBlob;
 //# sourceMappingURL=largestObjectLocalisation.js.map

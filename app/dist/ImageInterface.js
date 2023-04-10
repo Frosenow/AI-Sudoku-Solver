@@ -8,12 +8,17 @@ class ImageInterface {
         this.width = width;
         this.height = height;
     }
-    saveImageLocally(dataToSave, outputFilename) {
+    saveImageLocally(dataToSave, outputFilename, cordinates) {
         const canvasObj = canvas.createCanvas(this.width, this.height);
         const ctx = canvasObj.getContext("2d");
         const newImageData = ctx.createImageData(this.width, this.height);
         newImageData.data.set(dataToSave);
         ctx.putImageData(newImageData, 0, 0);
+        if (cordinates) {
+            ctx.lineWidth = 9;
+            ctx.strokeStyle = "green";
+            ctx.strokeRect(cordinates?.bounds.topLeft.x, cordinates?.bounds.topLeft.y, cordinates?.width, cordinates?.height);
+        }
         const out = fs.createWriteStream(outputFilename);
         const stream = canvasObj.createPNGStream();
         stream.pipe(out);
