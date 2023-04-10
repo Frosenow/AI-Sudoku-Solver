@@ -67,3 +67,17 @@ function findBlob(image: ImageInterface, x: number, y: number) {
 
   return new Blob(pixels, { x: minX, y: minY }, { x: maxX, y: maxY });
 }
+
+type BlobOptions = {
+  minAspectRatio: number;
+  maxAspectRatio: number;
+  minSize: number;
+  maxSize: number;
+};
+
+// Find the largest blob in givern binary image
+export default function getLargestBlog(binaryImage: ImageInterface, options: BlobOptions): Blob | null {
+  let largestRegion: Blob | null = null;
+
+  const imgTmp = binaryImage.copy();
+}

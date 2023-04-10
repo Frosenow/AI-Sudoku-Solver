@@ -32,6 +32,9 @@ class ImageInterface {
         }
         return imageData;
     }
+    get copy() {
+        return new ImageInterface(new Uint8ClampedArray(this.bytes), this.width, this.height);
+    }
 }
 exports.default = ImageInterface;
 //# sourceMappingURL=ImageInterface.js.map

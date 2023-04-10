@@ -51,4 +51,10 @@ function findBlob(image, x, y) {
     }
     return new Blob(pixels, { x: minX, y: minY }, { x: maxX, y: maxY });
 }
+// Find the largest blob in givern binary image
+function getLargestBlog(binaryImage, options) {
+    let largestRegion = null;
+    const imgTmp = binaryImage.copy();
+}
+exports.default = getLargestBlog;
 //# sourceMappingURL=largestObjectLocalisation.js.map

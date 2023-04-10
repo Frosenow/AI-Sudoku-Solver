@@ -1,3 +1,5 @@
+import { Image } from "canvas";
+
 const canvas = require("canvas");
 const fs = require("fs");
 
@@ -36,5 +38,9 @@ export default class ImageInterface {
       }
     }
     return imageData;
+  }
+
+  get copy(): ImageInterface {
+    return new ImageInterface(new Uint8ClampedArray(this.bytes), this.width, this.height);
   }
 }
