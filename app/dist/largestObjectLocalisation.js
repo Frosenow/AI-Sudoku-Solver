@@ -74,8 +74,10 @@ function getLargestBlob(binaryImage, options) {
                 // Get the region that is connected to the pixel
                 const connectedRegion = findBlob(imgTmp, x, y);
                 // Compute the width and height of the connected region
-                const regionWidth = connectedRegion.bounds.bottomRight.x - connectedRegion.bounds.topLeft.x;
-                const regionHeight = connectedRegion.bounds.bottomRight.y - connectedRegion.bounds.topLeft.y;
+                const regionWidth = connectedRegion.bounds.bottomRight.x -
+                    connectedRegion.bounds.topLeft.x;
+                const regionHeight = connectedRegion.bounds.bottomRight.y -
+                    connectedRegion.bounds.topLeft.y;
                 // Check if the connected region satisfies the given filtering criteria (BloblOptions)
                 const satisfiesFilters = connectedRegion.aspectRatio >= options.minAspectRatio &&
                     connectedRegion.aspectRatio <= options.maxAspectRatio &&
@@ -85,7 +87,9 @@ function getLargestBlob(binaryImage, options) {
                     regionWidth <= options.maxSize;
                 {
                     // Update the largest region if the current region satisfies the filtering criteria and has more pixels than the current largest region.
-                    if (satisfiesFilters && (!largestRegion || connectedRegion.points.length > largestRegion.points.length)) {
+                    if (satisfiesFilters &&
+                        (!largestRegion ||
+                            connectedRegion.points.length > largestRegion.points.length)) {
                         largestRegion = connectedRegion;
                     }
                 }
@@ -95,7 +99,6 @@ function getLargestBlob(binaryImage, options) {
     // Draw bounds on the biggest blob
     const test = binaryImage.toImageData();
     binaryImage.saveImageLocally(test.data, "test2.png", largestRegion);
-    console.log(largestRegion);
     return largestRegion;
 }
 exports.default = getLargestBlob;

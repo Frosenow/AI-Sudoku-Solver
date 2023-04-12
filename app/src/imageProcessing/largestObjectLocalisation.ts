@@ -60,8 +60,16 @@ function findBlob(image: ImageInterface, x: number, y: number) {
     maxY = Math.max(currentPixel!.y, maxY);
 
     // Chceck for neighboring pixels of current pixel
-    for (let neighborY = Math.max(0, currentPixel!.y - 1); neighborY < height && neighborY <= currentPixel!.y + 1; neighborY++) {
-      for (let neighborX = Math.max(0, currentPixel!.x - 1); neighborX < width && neighborX <= currentPixel!.x + 1; neighborX++) {
+    for (
+      let neighborY = Math.max(0, currentPixel!.y - 1);
+      neighborY < height && neighborY <= currentPixel!.y + 1;
+      neighborY++
+    ) {
+      for (
+        let neighborX = Math.max(0, currentPixel!.x - 1);
+        neighborX < width && neighborX <= currentPixel!.x + 1;
+        neighborX++
+      ) {
         // if neighboring pixel is unexplored and white (255)
         if (bytes[neighborY * width + neighborX] == 255) {
           // Add it to the stack and pixel array
@@ -87,7 +95,10 @@ type BlobOptions = {
 };
 
 // Find the largest blob in givern binary image
-export default function getLargestBlob(binaryImage: ImageInterface, options: BlobOptions): Blob | null {
+export default function getLargestBlob(
+  binaryImage: ImageInterface,
+  options: BlobOptions
+): Blob | null {
   let largestRegion: Blob | null = null;
 
   // Create copy of input image because we working on image reference
@@ -102,8 +113,12 @@ export default function getLargestBlob(binaryImage: ImageInterface, options: Blo
         // Get the region that is connected to the pixel
         const connectedRegion = findBlob(imgTmp, x, y);
         // Compute the width and height of the connected region
-        const regionWidth = connectedRegion.bounds.bottomRight.x - connectedRegion.bounds.topLeft.x;
-        const regionHeight = connectedRegion.bounds.bottomRight.y - connectedRegion.bounds.topLeft.y;
+        const regionWidth =
+          connectedRegion.bounds.bottomRight.x -
+          connectedRegion.bounds.topLeft.x;
+        const regionHeight =
+          connectedRegion.bounds.bottomRight.y -
+          connectedRegion.bounds.topLeft.y;
 
         // Check if the connected region satisfies the given filtering criteria (BloblOptions)
         const satisfiesFilters =
@@ -115,7 +130,11 @@ export default function getLargestBlob(binaryImage: ImageInterface, options: Blo
           regionWidth <= options.maxSize;
         {
           // Update the largest region if the current region satisfies the filtering criteria and has more pixels than the current largest region.
-          if (satisfiesFilters && (!largestRegion || connectedRegion.points.length > largestRegion.points.length)) {
+          if (
+            satisfiesFilters &&
+            (!largestRegion ||
+              connectedRegion.points.length > largestRegion.points.length)
+          ) {
             largestRegion = connectedRegion;
           }
         }
@@ -125,6 +144,5 @@ export default function getLargestBlob(binaryImage: ImageInterface, options: Blo
   // Draw bounds on the biggest blob
   const test = binaryImage.toImageData();
   binaryImage.saveImageLocally(test.data, "test2.png", largestRegion);
-  console.log(largestRegion);
   return largestRegion;
 }

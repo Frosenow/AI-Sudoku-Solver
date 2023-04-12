@@ -7,15 +7,22 @@ exports.processor = void 0;
 const greyscale_1 = __importDefault(require("./greyscale"));
 const adaptiveThreshold_1 = __importDefault(require("./adaptiveThreshold"));
 const largestObjectLocalisation_1 = __importDefault(require("./largestObjectLocalisation"));
+const cornerDetection_1 = __importDefault(require("./cornerDetection"));
 async function processor(imageObject) {
     const grayscaleImg = await (0, greyscale_1.default)(imageObject);
     const thresholded = (0, adaptiveThreshold_1.default)(grayscaleImg, 20, 20);
-    (0, largestObjectLocalisation_1.default)(thresholded, {
+    const largestBlob = (0, largestObjectLocalisation_1.default)(thresholded, {
         minAspectRatio: 0.5,
         maxAspectRatio: 1.5,
         minSize: Math.min(imageObject.width, imageObject.height) * 0.3,
         maxSize: Math.max(imageObject.width, imageObject.height) * 0.9,
     });
+    if (largestBlob) {
+        const cornerPoints = (0, cornerDetection_1.default)(largestBlob);
+    }
+    else {
+        console.log("Largest Blob not found");
+    }
 }
 exports.processor = processor;
 //# sourceMappingURL=imageProcessor.js.map
