@@ -14,9 +14,13 @@ function adaptiveThreshold(image, threshold, blurSize) {
         const row = y * width;
         for (let x = 0; x < width; x++) {
             // Calculating difference between blurred pixel and regular pixel to get threshold value
-            bytes[row + width + x] = blurredBytes[row + x] - bytes[row + width + x] > threshold ? 255 : 0;
+            bytes[row + width + x] =
+                blurredBytes[row + x] - bytes[row + width + x] > threshold ? 255 : 0;
         }
     }
+    // Saving image for demonstration purpouse
+    const outputImgData = image.toImageData();
+    image.saveImageLocally(outputImgData.data, "thresholdedImage.png");
     return image;
 }
 exports.default = adaptiveThreshold;

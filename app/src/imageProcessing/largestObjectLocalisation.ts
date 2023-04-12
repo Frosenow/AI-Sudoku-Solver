@@ -143,6 +143,10 @@ export default function getLargestBlob(
   }
   // Draw bounds on the biggest blob
   const test = binaryImage.toImageData();
-  binaryImage.saveImageLocally(test.data, "test2.png", largestRegion);
+  binaryImage.saveImageLocally(
+    test.data,
+    "blobDetectionImage.png",
+    largestRegion
+  );
   return largestRegion;
 }

@@ -2,7 +2,11 @@
 import ImageInterface from "./ImageInterface";
 
 // Precalculate sum of each pixel
-function precalculate(bytes: Uint8ClampedArray, width: number, height: number): number[] {
+function precalculate(
+  bytes: Uint8ClampedArray,
+  width: number,
+  height: number
+): number[] {
   const result: number[] = new Array(bytes.length);
   // Output array indexes
   let outputIdx = 0;
@@ -25,7 +29,13 @@ function precalculate(bytes: Uint8ClampedArray, width: number, height: number): 
   return result;
 }
 
-function getPrecalculated(precalculated: number[], w: number, h: number, x: number, y: number): number {
+function getPrecalculated(
+  precalculated: number[],
+  w: number,
+  h: number,
+  x: number,
+  y: number
+): number {
   if (x < 0) x = 0;
   else if (x >= w) x = w - 1;
   if (y < 0) y = 0;
@@ -33,7 +43,11 @@ function getPrecalculated(precalculated: number[], w: number, h: number, x: numb
   return precalculated[x + y * w];
 }
 
-export default function boxBlur(src: ImageInterface, boxw: number, boxh: number): ImageInterface {
+export default function boxBlur(
+  src: ImageInterface,
+  boxw: number,
+  boxh: number
+): ImageInterface {
   const { width, height, bytes } = src;
   // Precalculated sums of rectangular regions around pixels
   const precalculated = precalculate(bytes, width, height);
@@ -56,5 +70,10 @@ export default function boxBlur(src: ImageInterface, boxw: number, boxh: number)
     }
   }
   const output = new ImageInterface(result, width, height);
+
+  // Saving image for demonstration purpouse
+  const outputImgData = output.toImageData();
+  output.saveImageLocally(outputImgData.data, "boxBlurImage.png");
+
   return output;
 }

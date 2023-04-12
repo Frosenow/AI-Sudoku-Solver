@@ -62,6 +62,9 @@ function boxBlur(src, boxw, boxh) {
         }
     }
     const output = new ImageInterface_1.default(result, width, height);
+    // Saving image for demonstration purpouse
+    const outputImgData = output.toImageData();
+    output.saveImageLocally(outputImgData.data, "boxBlurImage.png");
     return output;
 }
 exports.default = boxBlur;

@@ -21,6 +21,9 @@ async function convertToGrayscale(imageData) {
         }
     }
     const output = new ImageInterface_1.default(bytes, width, height);
+    // Saving image for demonstration purpouse
+    const outputImgData = output.toImageData();
+    output.saveImageLocally(outputImgData.data, "greyscaleImage.png");
     return output;
 }
 exports.default = convertToGrayscale;
