@@ -25,10 +25,10 @@ function getCornersCords(area) {
     const { points } = area;
     // find the points closest to the upper-left, upper-right, lower-left, and lower-right
     return {
-        upperLeft: getClosestPoint(points, minX, minY),
-        upperRight: getClosestPoint(points, maxX, minY),
-        lowerLeft: getClosestPoint(points, minX, maxY),
-        lowerRight: getClosestPoint(points, maxX, maxY),
+        topLeft: getClosestPoint(points, minX, minY),
+        topRight: getClosestPoint(points, maxX, minY),
+        bottomLeft: getClosestPoint(points, minX, maxY),
+        bottomRight: getClosestPoint(points, maxX, maxY),
     };
 }
 exports.default = getCornersCords;

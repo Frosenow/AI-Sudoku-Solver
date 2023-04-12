@@ -21,17 +21,24 @@ function getClosestPoint(points: Point[], x: number, y: number) {
   return closest;
 }
 
+export type CornerPoints = {
+  topLeft: Point;
+  topRight: Point;
+  bottomLeft: Point;
+  bottomRight: Point;
+};
+
 // Find corner points of a blob
-export default function getCornersCords(area: Blob) {
+export default function getCornersCords(area: Blob): CornerPoints {
   const { x: minX, y: minY } = area.bounds.topLeft;
   const { x: maxX, y: maxY } = area.bounds.bottomRight;
   const { points } = area;
 
   // find the points closest to the upper-left, upper-right, lower-left, and lower-right
   return {
-    upperLeft: getClosestPoint(points, minX, minY),
-    upperRight: getClosestPoint(points, maxX, minY),
-    lowerLeft: getClosestPoint(points, minX, maxY),
-    lowerRight: getClosestPoint(points, maxX, maxY),
+    topLeft: getClosestPoint(points, minX, minY),
+    topRight: getClosestPoint(points, maxX, minY),
+    bottomLeft: getClosestPoint(points, minX, maxY),
+    bottomRight: getClosestPoint(points, maxX, maxY),
   };
 }

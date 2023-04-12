@@ -19,6 +19,8 @@ async function processor(imageObject) {
     });
     if (largestBlob) {
         const cornerPoints = (0, cornerDetection_1.default)(largestBlob);
+        console.log(cornerPoints);
+        thresholded.saveImageLocally(imageObject.data, "cornerPointsImage.png", largestBlob, cornerPoints);
     }
     else {
         console.log("Largest Blob not found");

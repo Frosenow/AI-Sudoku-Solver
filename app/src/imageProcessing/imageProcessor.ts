@@ -17,6 +17,13 @@ export async function processor(imageObject: ImageData): Promise<void> {
 
   if (largestBlob) {
     const cornerPoints = getCornersCords(largestBlob);
+    console.log(cornerPoints);
+    thresholded.saveImageLocally(
+      imageObject.data,
+      "cornerPointsImage.png",
+      largestBlob,
+      cornerPoints
+    );
   } else {
     console.log("Largest Blob not found");
   }
