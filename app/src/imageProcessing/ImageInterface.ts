@@ -43,7 +43,7 @@ export default class ImageInterface {
       ctx.fillStyle = "red";
       ctx.fillRect(points.bottomLeft.x, points.bottomLeft.y, 15, 15);
       ctx.fillRect(points.bottomRight.x, points.bottomRight.y, 15, 15);
-      ctx.fillRect(points.topRight.x, points.topLeft.y, 15, 15);
+      ctx.fillRect(points.topRight.x, points.topRight.y, 15, 15);
       ctx.fillRect(points.topLeft.x, points.topLeft.y, 15, 15);
     }
 
