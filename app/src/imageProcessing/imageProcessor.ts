@@ -4,6 +4,7 @@ import convertToGrayscale from "./greyscale";
 import adaptiveThreshold from "./adaptiveThreshold";
 import getLargestBlob from "./largestObjectLocalisation";
 import getCornersCords from "./cornerDetection";
+import sanityCheck from "./sanityCheck";
 
 export async function processor(imageObject: ImageData): Promise<void> {
   const grayscaleImg = await convertToGrayscale(imageObject);
@@ -24,6 +25,7 @@ export async function processor(imageObject: ImageData): Promise<void> {
       largestBlob,
       cornerPoints
     );
+    console.log(sanityCheck(cornerPoints));
   } else {
     console.log("Largest Blob not found");
   }

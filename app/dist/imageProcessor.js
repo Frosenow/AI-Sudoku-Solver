@@ -8,6 +8,7 @@ const greyscale_1 = __importDefault(require("./greyscale"));
 const adaptiveThreshold_1 = __importDefault(require("./adaptiveThreshold"));
 const largestObjectLocalisation_1 = __importDefault(require("./largestObjectLocalisation"));
 const cornerDetection_1 = __importDefault(require("./cornerDetection"));
+const sanityCheck_1 = __importDefault(require("./sanityCheck"));
 async function processor(imageObject) {
     const grayscaleImg = await (0, greyscale_1.default)(imageObject);
     const thresholded = (0, adaptiveThreshold_1.default)(grayscaleImg, 20, 20);
@@ -21,6 +22,7 @@ async function processor(imageObject) {
         const cornerPoints = (0, cornerDetection_1.default)(largestBlob);
         console.log(cornerPoints);
         thresholded.saveImageLocally(imageObject.data, "cornerPointsImage.png", largestBlob, cornerPoints);
+        console.log((0, sanityCheck_1.default)(cornerPoints));
     }
     else {
         console.log("Largest Blob not found");
