@@ -101,4 +101,4 @@ function transformPoint(point, transform) {
     return { x: sx, y: sy };
 }
 exports.transformPoint = transformPoint;
-//# sourceMappingURL=HomographicTransform.js.map
+//# sourceMappingURL=homographicTransform.js.map
