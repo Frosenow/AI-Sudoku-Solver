@@ -23,7 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.transformPoint = void 0;
+exports.transformPoint = exports.homographicTransform = void 0;
 const math = __importStar(require("mathjs"));
 function homographicTransform(size, corners) {
     // Create an 8x8 matrix with all elements set to 0
@@ -88,7 +88,7 @@ function homographicTransform(size, corners) {
     // Return an object containing the individual values of the unknowns.
     return { a, b, c, d, e, f, g, h };
 }
-exports.default = homographicTransform;
+exports.homographicTransform = homographicTransform;
 // Define the transformPoint function which takes a point and a transform object
 function transformPoint(point, transform) {
     const { a, b, c, d, e, f, g, h } = transform;

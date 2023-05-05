@@ -1,7 +1,7 @@
 import { Point } from "./largestObjectLocalisation";
 import * as math from "mathjs";
 
-export interface Transform {
+interface Transform {
   a: number;
   b: number;
   c: number;
@@ -11,8 +11,7 @@ export interface Transform {
   g: number;
   h: number;
 }
-
-export default function homographicTransform(
+function homographicTransform(
   size: number,
   corners: {
     topLeft: Point;
@@ -94,7 +93,7 @@ export default function homographicTransform(
 }
 
 // Define the transformPoint function which takes a point and a transform object
-export function transformPoint(point: Point, transform: Transform) {
+function transformPoint(point: Point, transform: Transform) {
   const { a, b, c, d, e, f, g, h } = transform;
   const { x, y } = point;
 
@@ -106,3 +105,5 @@ export function transformPoint(point: Point, transform: Transform) {
   // Return the transformed point as an object with x and y properties
   return { x: sx, y: sy };
 }
+
+export { Transform, homographicTransform, transformPoint };

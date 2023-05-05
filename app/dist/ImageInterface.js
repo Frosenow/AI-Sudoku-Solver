@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const path = require("path");
 const canvas = require("canvas");
 const fs = require("fs");
 class ImageInterface {
@@ -28,7 +29,7 @@ class ImageInterface {
             ctx.fillRect(points.topRight.x, points.topRight.y, 15, 15);
             ctx.fillRect(points.topLeft.x, points.topLeft.y, 15, 15);
         }
-        const out = fs.createWriteStream(outputFilename);
+        const out = fs.createWriteStream(path.join("./results", outputFilename));
         const stream = canvasObj.createPNGStream();
         stream.pipe(out);
     }
@@ -45,6 +46,24 @@ class ImageInterface {
             }
         }
         return imageData;
+    }
+    drawGridLines(linesData, imageData, outputFilename) {
+        const canvasObj = canvas.createCanvas(this.width, this.height);
+        const ctx = canvasObj.getContext("2d");
+        const newImageData = ctx.createImageData(this.width, this.height);
+        newImageData.data.set(imageData);
+        ctx.putImageData(newImageData, 0, 0);
+        linesData.forEach((lineData) => {
+            ctx.beginPath();
+            ctx.moveTo(lineData.p1.x, lineData.p1.y);
+            ctx.lineTo(lineData.p2.x, lineData.p2.y);
+            ctx.strokeStyle = "red";
+            ctx.lineWidth = 8;
+            ctx.stroke();
+        });
+        const out = fs.createWriteStream(path.join("./results", outputFilename));
+        const stream = canvasObj.createPNGStream();
+        stream.pipe(out);
     }
     get copy() {
         return new ImageInterface(new Uint8ClampedArray(this.bytes), this.width, this.height);

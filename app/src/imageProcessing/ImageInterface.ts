@@ -1,9 +1,21 @@
 import { Image } from "canvas";
 import { Point, Blob } from "./largestObjectLocalisation";
 import { CornerPoints } from "./cornerDetection";
+const path = require("path");
 
 const canvas = require("canvas");
 const fs = require("fs");
+
+interface PointPair {
+  p1: {
+    x: number;
+    y: number;
+  };
+  p2: {
+    x: number;
+    y: number;
+  };
+}
 
 export default class ImageInterface {
   bytes: Uint8ClampedArray;
@@ -47,7 +59,7 @@ export default class ImageInterface {
       ctx.fillRect(points.topLeft.x, points.topLeft.y, 15, 15);
     }
 
-    const out = fs.createWriteStream(outputFilename);
+    const out = fs.createWriteStream(path.join("./results", outputFilename));
     const stream = canvasObj.createPNGStream();
     stream.pipe(out);
   }
@@ -65,6 +77,31 @@ export default class ImageInterface {
       }
     }
     return imageData;
+  }
+
+  drawGridLines(
+    linesData: PointPair[],
+    imageData: Uint8ClampedArray,
+    outputFilename: string
+  ) {
+    const canvasObj = canvas.createCanvas(this.width, this.height);
+    const ctx = canvasObj.getContext("2d");
+    const newImageData = ctx.createImageData(this.width, this.height);
+    newImageData.data.set(imageData);
+    ctx.putImageData(newImageData, 0, 0);
+
+    linesData.forEach((lineData) => {
+      ctx.beginPath();
+      ctx.moveTo(lineData.p1.x, lineData.p1.y);
+      ctx.lineTo(lineData.p2.x, lineData.p2.y);
+      ctx.strokeStyle = "red";
+      ctx.lineWidth = 8;
+      ctx.stroke();
+    });
+
+    const out = fs.createWriteStream(path.join("./results", outputFilename));
+    const stream = canvasObj.createPNGStream();
+    stream.pipe(out);
   }
 
   get copy(): ImageInterface {
