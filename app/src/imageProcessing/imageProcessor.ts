@@ -58,7 +58,7 @@ export async function processor(imageObject: ImageData): Promise<void> {
       boxes.forEach((box: SudokuBox, idx: number) => {
         box.numberImage.saveImageLocally(
           box.numberImage.toImageData().data,
-          `test${idx}.png`
+          `./digits/test${idx}.png`
         );
       });
     }

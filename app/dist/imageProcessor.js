@@ -36,7 +36,7 @@ async function processor(imageObject) {
             const extractedThresholdImage = (0, getTransformedSquares_1.default)(thresholded, PROCESSING_SIZE, transform, "thresholdExtracted.png");
             const boxes = (0, extractBoxes_1.extractSudokuBoxes)(extractedGrayscaleImage, extractedThresholdImage);
             boxes.forEach((box, idx) => {
-                box.numberImage.saveImageLocally(box.numberImage.toImageData().data, `test${idx}.png`);
+                box.numberImage.saveImageLocally(box.numberImage.toImageData().data, `./digits/test${idx}.png`);
             });
         }
     }
