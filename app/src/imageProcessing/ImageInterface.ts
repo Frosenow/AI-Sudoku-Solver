@@ -104,6 +104,11 @@ export default class ImageInterface {
     stream.pipe(out);
   }
 
+  blankImage(width: number, height: number): ImageInterface {
+    const bytes = new Uint8ClampedArray(width * height);
+    return new ImageInterface(bytes, width, height);
+  }
+
   get copy(): ImageInterface {
     return new ImageInterface(
       new Uint8ClampedArray(this.bytes),

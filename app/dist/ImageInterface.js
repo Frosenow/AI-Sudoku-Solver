@@ -65,6 +65,10 @@ class ImageInterface {
         const stream = canvasObj.createPNGStream();
         stream.pipe(out);
     }
+    blankImage(width, height) {
+        const bytes = new Uint8ClampedArray(width * height);
+        return new ImageInterface(bytes, width, height);
+    }
     get copy() {
         return new ImageInterface(new Uint8ClampedArray(this.bytes), this.width, this.height);
     }
