@@ -1,7 +1,7 @@
 import ImageInterface from "./ImageInterface";
 
 // Helper class to find and localise the biggest blob
-export class Blob {
+class Blob {
   points: Point[];
   bounds: { topLeft: Point; bottomRight: Point };
   constructor(points: Point[], topLeft: Point, bottomRight: Point) {
@@ -95,7 +95,7 @@ type BlobOptions = {
 };
 
 // Find the largest blob in givern binary image
-export default function getLargestBlob(
+function getLargestBlob(
   binaryImage: ImageInterface,
   options: BlobOptions
 ): Blob | null {
@@ -150,3 +150,5 @@ export default function getLargestBlob(
   );
   return largestRegion;
 }
+
+export { getLargestBlob, findBlob, Blob };

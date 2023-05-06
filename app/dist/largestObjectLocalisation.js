@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Blob = void 0;
+exports.Blob = exports.findBlob = exports.getLargestBlob = void 0;
 // Helper class to find and localise the biggest blob
 class Blob {
     constructor(points, topLeft, bottomRight) {
@@ -60,6 +60,7 @@ function findBlob(image, x, y) {
     }
     return new Blob(pixels, { x: minX, y: minY }, { x: maxX, y: maxY });
 }
+exports.findBlob = findBlob;
 // Find the largest blob in givern binary image
 function getLargestBlob(binaryImage, options) {
     let largestRegion = null;
@@ -101,5 +102,5 @@ function getLargestBlob(binaryImage, options) {
     binaryImage.saveImageLocally(test.data, "blobDetectionImage.png", largestRegion);
     return largestRegion;
 }
-exports.default = getLargestBlob;
+exports.getLargestBlob = getLargestBlob;
 //# sourceMappingURL=largestObjectLocalisation.js.map

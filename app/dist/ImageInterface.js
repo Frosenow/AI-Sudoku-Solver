@@ -13,6 +13,17 @@ class ImageInterface {
         const bytes = new Uint8ClampedArray(width * height);
         return new ImageInterface(bytes, width, height);
     }
+    createSubImage(x1, y1, x2, y2) {
+        const width = x2 - x1;
+        const height = y2 - y1;
+        const bytes = new Uint8ClampedArray(width * height);
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                bytes[y * width + x] = this.bytes[(y + y1) * this.width + x + x1];
+            }
+        }
+        return new ImageInterface(bytes, width, height);
+    }
     saveImageLocally(dataToSave, outputFilename, cordinates = null, points = null) {
         const canvasObj = canvas.createCanvas(this.width, this.height);
         const ctx = canvasObj.getContext("2d");

@@ -6,16 +6,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.processor = void 0;
 const greyscale_1 = __importDefault(require("./greyscale"));
 const adaptiveThreshold_1 = __importDefault(require("./adaptiveThreshold"));
-const largestObjectLocalisation_1 = __importDefault(require("./largestObjectLocalisation"));
+const largestObjectLocalisation_1 = require("./largestObjectLocalisation");
 const cornerDetection_1 = __importDefault(require("./cornerDetection"));
 const sanityCheck_1 = __importDefault(require("./sanityCheck"));
 const homographicTransform_1 = require("./homographicTransform");
 const createGridLines_1 = __importDefault(require("./createGridLines"));
 const getTransformedSquares_1 = __importDefault(require("./getTransformedSquares"));
+const extractBoxes_1 = require("./extractBoxes");
 async function processor(imageObject) {
     const grayscaleImg = await (0, greyscale_1.default)(imageObject);
     const thresholded = (0, adaptiveThreshold_1.default)(grayscaleImg, 20, 20);
-    const largestBlob = (0, largestObjectLocalisation_1.default)(thresholded, {
+    const largestBlob = (0, largestObjectLocalisation_1.getLargestBlob)(thresholded, {
         minAspectRatio: 0.5,
         maxAspectRatio: 1.5,
         minSize: Math.min(imageObject.width, imageObject.height) * 0.3,
@@ -33,6 +34,10 @@ async function processor(imageObject) {
             thresholded.drawGridLines(gridLines, imageObject.data, "gridLines.png");
             const extractedGrayscaleImage = (0, getTransformedSquares_1.default)(grayscaleImg, PROCESSING_SIZE, transform, "greyscaleExtracted.png");
             const extractedThresholdImage = (0, getTransformedSquares_1.default)(thresholded, PROCESSING_SIZE, transform, "thresholdExtracted.png");
+            const boxes = (0, extractBoxes_1.extractSudokuBoxes)(extractedGrayscaleImage, extractedThresholdImage);
+            boxes.forEach((box, idx) => {
+                box.numberImage.saveImageLocally(box.numberImage.toImageData().data, `test${idx}.png`);
+            });
         }
     }
     else {

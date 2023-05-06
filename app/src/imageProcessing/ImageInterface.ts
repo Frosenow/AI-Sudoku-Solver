@@ -32,6 +32,23 @@ export default class ImageInterface {
     return new ImageInterface(bytes, width, height);
   }
 
+  createSubImage(
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number
+  ): ImageInterface {
+    const width = x2 - x1;
+    const height = y2 - y1;
+    const bytes = new Uint8ClampedArray(width * height);
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        bytes[y * width + x] = this.bytes[(y + y1) * this.width + x + x1];
+      }
+    }
+    return new ImageInterface(bytes, width, height);
+  }
+
   saveImageLocally(
     dataToSave: Uint8ClampedArray,
     outputFilename: string,

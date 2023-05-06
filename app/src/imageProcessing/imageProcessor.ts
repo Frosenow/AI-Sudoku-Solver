@@ -2,12 +2,13 @@ import ImageInterface from "./ImageInterface";
 import boxBlur from "./boxblur";
 import convertToGrayscale from "./greyscale";
 import adaptiveThreshold from "./adaptiveThreshold";
-import getLargestBlob from "./largestObjectLocalisation";
+import { getLargestBlob } from "./largestObjectLocalisation";
 import getCornersCords from "./cornerDetection";
 import sanityCheck from "./sanityCheck";
 import { homographicTransform } from "./homographicTransform";
 import createGridLines from "./createGridLines";
 import getTransformedSquares from "./getTransformedSquares";
+import { SudokuBox, extractSudokuBoxes } from "./extractBoxes";
 
 export async function processor(imageObject: ImageData): Promise<void> {
   const grayscaleImg = await convertToGrayscale(imageObject);
@@ -48,6 +49,18 @@ export async function processor(imageObject: ImageData): Promise<void> {
         transform,
         "thresholdExtracted.png"
       );
+
+      const boxes = extractSudokuBoxes(
+        extractedGrayscaleImage,
+        extractedThresholdImage
+      );
+
+      boxes.forEach((box: SudokuBox, idx: number) => {
+        box.numberImage.saveImageLocally(
+          box.numberImage.toImageData().data,
+          `test${idx}.png`
+        );
+      });
     }
   } else {
     console.log("Largest Blob not found");
