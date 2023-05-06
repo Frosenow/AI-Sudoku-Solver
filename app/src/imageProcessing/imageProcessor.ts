@@ -7,6 +7,7 @@ import getCornersCords from "./cornerDetection";
 import sanityCheck from "./sanityCheck";
 import { homographicTransform } from "./homographicTransform";
 import createGridLines from "./createGridLines";
+import getTransformedSquares from "./getTransformedSquares";
 
 export async function processor(imageObject: ImageData): Promise<void> {
   const grayscaleImg = await convertToGrayscale(imageObject);
@@ -33,6 +34,20 @@ export async function processor(imageObject: ImageData): Promise<void> {
       console.log(transform);
       const gridLines = createGridLines(transform, PROCESSING_SIZE);
       thresholded.drawGridLines(gridLines, imageObject.data, "gridLines.png");
+
+      const extractedGrayscaleImage = getTransformedSquares(
+        grayscaleImg,
+        PROCESSING_SIZE,
+        transform,
+        "greyscaleExtracted.png"
+      );
+
+      const extractedThresholdImage = getTransformedSquares(
+        thresholded,
+        PROCESSING_SIZE,
+        transform,
+        "thresholdExtracted.png"
+      );
     }
   } else {
     console.log("Largest Blob not found");

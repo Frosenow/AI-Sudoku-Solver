@@ -9,6 +9,10 @@ class ImageInterface {
         this.width = width;
         this.height = height;
     }
+    static blankImage(width, height) {
+        const bytes = new Uint8ClampedArray(width * height);
+        return new ImageInterface(bytes, width, height);
+    }
     saveImageLocally(dataToSave, outputFilename, cordinates = null, points = null) {
         const canvasObj = canvas.createCanvas(this.width, this.height);
         const ctx = canvasObj.getContext("2d");
@@ -64,10 +68,6 @@ class ImageInterface {
         const out = fs.createWriteStream(path.join("./results", outputFilename));
         const stream = canvasObj.createPNGStream();
         stream.pipe(out);
-    }
-    blankImage(width, height) {
-        const bytes = new Uint8ClampedArray(width * height);
-        return new ImageInterface(bytes, width, height);
     }
     get copy() {
         return new ImageInterface(new Uint8ClampedArray(this.bytes), this.width, this.height);

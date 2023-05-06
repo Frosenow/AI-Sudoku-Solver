@@ -11,6 +11,7 @@ const cornerDetection_1 = __importDefault(require("./cornerDetection"));
 const sanityCheck_1 = __importDefault(require("./sanityCheck"));
 const homographicTransform_1 = require("./homographicTransform");
 const createGridLines_1 = __importDefault(require("./createGridLines"));
+const getTransformedSquares_1 = __importDefault(require("./getTransformedSquares"));
 async function processor(imageObject) {
     const grayscaleImg = await (0, greyscale_1.default)(imageObject);
     const thresholded = (0, adaptiveThreshold_1.default)(grayscaleImg, 20, 20);
@@ -30,6 +31,8 @@ async function processor(imageObject) {
             console.log(transform);
             const gridLines = (0, createGridLines_1.default)(transform, PROCESSING_SIZE);
             thresholded.drawGridLines(gridLines, imageObject.data, "gridLines.png");
+            const extractedGrayscaleImage = (0, getTransformedSquares_1.default)(grayscaleImg, PROCESSING_SIZE, transform, "greyscaleExtracted.png");
+            const extractedThresholdImage = (0, getTransformedSquares_1.default)(thresholded, PROCESSING_SIZE, transform, "thresholdExtracted.png");
         }
     }
     else {

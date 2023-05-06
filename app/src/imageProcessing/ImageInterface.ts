@@ -27,6 +27,11 @@ export default class ImageInterface {
     this.height = height;
   }
 
+  static blankImage(width: number, height: number): ImageInterface {
+    const bytes = new Uint8ClampedArray(width * height);
+    return new ImageInterface(bytes, width, height);
+  }
+
   saveImageLocally(
     dataToSave: Uint8ClampedArray,
     outputFilename: string,
@@ -102,11 +107,6 @@ export default class ImageInterface {
     const out = fs.createWriteStream(path.join("./results", outputFilename));
     const stream = canvasObj.createPNGStream();
     stream.pipe(out);
-  }
-
-  blankImage(width: number, height: number): ImageInterface {
-    const bytes = new Uint8ClampedArray(width * height);
-    return new ImageInterface(bytes, width, height);
   }
 
   get copy(): ImageInterface {
