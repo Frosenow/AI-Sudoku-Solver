@@ -9,13 +9,22 @@
     <title>AI Sudoku Solver</title>
   </head>
   <body>
+       <nav class="navbar">
+        <div class="logo">
+          SUDOKU SOLVER
+        </div>
+        <ul class="list">
+          <li class="list-item">
+            <a href="app\views\about.ejs">About</a>
+          </li>
+        </ul>
+       </nav>
     <div class="container">
-      <h1>Sudoku Solver</h1>
-
-      <input type="file" name="data" id="upload-btn" accept="image/*" />
       <canvas id="canvas"></canvas>
+      <div class="button">
+        <input type="file" name="data" id="upload-btn" accept="image/*" />
+      </div>
     </div>
-
     <script type="text/javascript" src="main.js"></script>
   </body>
 </html>
