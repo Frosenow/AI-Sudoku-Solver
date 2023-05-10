@@ -18,10 +18,15 @@ function uploadImage() {
     ctx.drawImage(imgObj, 0, 0, canvas.width, canvas.height);
     const dataURL = canvas.toDataURL("image/png");
 
+    canvas.style.display = "block";
     // Send encoded image to server
     fetch("/uploads", {
       method: "POST",
-      body: JSON.stringify({ dataURL: dataURL, width: canvas.width, height: canvas.height }),
+      body: JSON.stringify({
+        dataURL: dataURL,
+        width: canvas.width,
+        height: canvas.height,
+      }),
       headers: {
         "Content-Type": "application/json",
       },
