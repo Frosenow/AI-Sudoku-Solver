@@ -44,6 +44,13 @@ class ImageInterface {
             ctx.fillRect(points.topRight.x, points.topRight.y, 15, 15);
             ctx.fillRect(points.topLeft.x, points.topLeft.y, 15, 15);
         }
+        const dirPath = path.join("./results/digits");
+        // Check if the directory exists
+        if (!fs.existsSync(dirPath)) {
+            // Create the directory and any missing parent directories
+            fs.mkdirSync(dirPath, { recursive: true });
+            console.log(`Directory ${dirPath} created successfully.`);
+        }
         const out = fs.createWriteStream(path.join("./results", outputFilename));
         const stream = canvasObj.createPNGStream();
         stream.pipe(out);
