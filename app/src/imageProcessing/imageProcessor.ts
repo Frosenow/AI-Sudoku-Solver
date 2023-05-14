@@ -8,7 +8,6 @@ import createGridLines from "./createGridLines";
 import getTransformedSquares from "./getTransformedSquares";
 import { SudokuBox, extractSudokuBoxes } from "./extractBoxes";
 import fillInPrediction from "../digitsRecognition/predictDigits";
-import * as tf from "@tensorflow/tfjs-node";
 
 export async function processor(imageObject: ImageData): Promise<void> {
   const grayscaleImg = await convertToGrayscale(imageObject);
@@ -22,7 +21,6 @@ export async function processor(imageObject: ImageData): Promise<void> {
 
   if (largestBlob) {
     const cornerPoints = getCornersCords(largestBlob);
-    console.log(cornerPoints);
     thresholded.saveImageLocally(
       imageObject.data,
       "cornerPointsImage.png",
@@ -32,7 +30,6 @@ export async function processor(imageObject: ImageData): Promise<void> {
     if (sanityCheck(cornerPoints)) {
       const PROCESSING_SIZE = 900;
       const transform = homographicTransform(PROCESSING_SIZE, cornerPoints);
-      console.log(transform);
       const gridLines = createGridLines(transform, PROCESSING_SIZE);
       thresholded.drawGridLines(gridLines, imageObject.data, "gridLines.png");
 
@@ -55,13 +52,14 @@ export async function processor(imageObject: ImageData): Promise<void> {
         extractedThresholdImage
       );
 
-      await fillInPrediction(boxes);
       boxes.forEach((box: SudokuBox, idx: number) => {
         box.numberImage.saveImageLocally(
           box.numberImage.toImageData().data,
-          `./digits/digit${idx}-number${box.contents}.png`
+          `./digits/digit${idx}.png`
         );
       });
+
+      await fillInPrediction(boxes);
     }
   } else {
     console.log("Largest Blob not found");

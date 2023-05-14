@@ -25,21 +25,19 @@ async function processor(imageObject) {
     });
     if (largestBlob) {
         const cornerPoints = (0, cornerDetection_1.default)(largestBlob);
-        console.log(cornerPoints);
         thresholded.saveImageLocally(imageObject.data, "cornerPointsImage.png", largestBlob, cornerPoints);
         if ((0, sanityCheck_1.default)(cornerPoints)) {
             const PROCESSING_SIZE = 900;
             const transform = (0, homographicTransform_1.homographicTransform)(PROCESSING_SIZE, cornerPoints);
-            console.log(transform);
             const gridLines = (0, createGridLines_1.default)(transform, PROCESSING_SIZE);
             thresholded.drawGridLines(gridLines, imageObject.data, "gridLines.png");
             const extractedGrayscaleImage = (0, getTransformedSquares_1.default)(grayscaleImg, PROCESSING_SIZE, transform, "greyscaleExtracted.png");
             const extractedThresholdImage = (0, getTransformedSquares_1.default)(thresholded, PROCESSING_SIZE, transform, "thresholdExtracted.png");
             const boxes = (0, extractBoxes_1.extractSudokuBoxes)(extractedGrayscaleImage, extractedThresholdImage);
-            await (0, predictDigits_1.default)(boxes);
             boxes.forEach((box, idx) => {
-                box.numberImage.saveImageLocally(box.numberImage.toImageData().data, `./digits/digit${idx}-number${box.contents}.png`);
+                box.numberImage.saveImageLocally(box.numberImage.toImageData().data, `./digits/digit${idx}.png`);
             });
+            await (0, predictDigits_1.default)(boxes);
         }
     }
     else {

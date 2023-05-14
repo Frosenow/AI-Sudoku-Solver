@@ -21,13 +21,18 @@ function uploadImage() {
     // Send encoded image to server
     fetch("/uploads", {
       method: "POST",
-      body: JSON.stringify({ dataURL: dataURL, width: canvas.width, height: canvas.height }),
+      body: JSON.stringify({
+        dataURL: dataURL,
+        width: canvas.width,
+        height: canvas.height,
+      }),
       headers: {
         "Content-Type": "application/json",
       },
     })
       .then((response) => {
         // Handle response
+        return response.blob();
       })
       .catch((error) => {
         console.error(error);
