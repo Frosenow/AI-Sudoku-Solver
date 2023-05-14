@@ -26,6 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getClasses = void 0;
 const tfn = __importStar(require("@tensorflow/tfjs-node"));
 const tf = __importStar(require("@tensorflow/tfjs"));
+const { createCanvas, loadImage } = require("canvas");
 const MODEL_URL = tfn.io.fileSystem("./tfjs_model/model.json");
 const CLASSES = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const IMAGE_SIZE = 20;
@@ -54,15 +55,18 @@ async function getClasses(logits) {
 exports.getClasses = getClasses;
 async function fillInPrediction(boxes) {
     const model = await loadModel();
+    const imageDataArr = [];
+    boxes.forEach(async (box) => {
+        const canvas = createCanvas(box.numberImage.toImageData().width, box.numberImage.toImageData().height);
+        const ctx = canvas.getContext("2d");
+        ctx.putImageData(box.numberImage.toImageData(), 0, 0);
+        imageDataArr.push(canvas);
+    });
     const logits = tf.tidy(() => {
         // convert the images into tensors
-        const images = boxes.map((box) => {
-            const imageObj = box.numberImage.toImageData();
-            const pixelData = new Uint8Array(imageObj.data);
-            const width = imageObj.width;
-            const height = imageObj.height;
+        const images = imageDataArr.map((box) => {
             const img = tf.browser
-                .fromPixels({ data: pixelData, width, height }, 1)
+                .fromPixels(box, 1)
                 .resizeBilinear([IMAGE_SIZE, IMAGE_SIZE])
                 .toFloat();
             const mean = img.mean();
@@ -72,10 +76,7 @@ async function fillInPrediction(boxes) {
             return batched;
         });
         const input = tf.concat(images);
-        // Make the predictions
-        return model.predict(input, {
-            batchSize: boxes.length,
-        });
+        return model.predict(input, { batchSize: boxes.length });
     });
     // Convert logits to probabilities and class names.
     const classes = await getClasses(logits);

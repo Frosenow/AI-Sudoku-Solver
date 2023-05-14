@@ -1,6 +1,8 @@
 import * as tfn from "@tensorflow/tfjs-node";
 import * as tf from "@tensorflow/tfjs";
 import { SudokuBox } from "../imageProcessing/extractBoxes";
+const { createCanvas, loadImage } = require("canvas");
+
 const MODEL_URL = tfn.io.fileSystem("./tfjs_model/model.json");
 
 const CLASSES = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -32,16 +34,22 @@ export async function getClasses(logits: tf.Tensor<tf.Rank>) {
 
 export default async function fillInPrediction(boxes: SudokuBox[]) {
   const model = await loadModel();
+  const imageDataArr: HTMLCanvasElement[] = [];
+  boxes.forEach(async (box) => {
+    const canvas = createCanvas(
+      box.numberImage.toImageData().width,
+      box.numberImage.toImageData().height
+    );
+    const ctx = canvas.getContext("2d");
+    ctx.putImageData(box.numberImage.toImageData(), 0, 0);
+    imageDataArr.push(canvas);
+  });
+
   const logits = tf.tidy(() => {
     // convert the images into tensors
-    const images = boxes.map((box) => {
-      const imageObj = box.numberImage.toImageData();
-      const pixelData = new Uint8Array(imageObj.data);
-      const width = imageObj.width;
-      const height = imageObj.height;
-
+    const images = imageDataArr.map((box) => {
       const img = tf.browser
-        .fromPixels({ data: pixelData, width, height }, 1)
+        .fromPixels(box, 1)
         .resizeBilinear([IMAGE_SIZE, IMAGE_SIZE])
         .toFloat();
       const mean = img.mean();
@@ -51,10 +59,7 @@ export default async function fillInPrediction(boxes: SudokuBox[]) {
       return batched;
     });
     const input = tf.concat(images);
-    // Make the predictions
-    return model.predict(input, {
-      batchSize: boxes.length,
-    });
+    return model.predict(input, { batchSize: boxes.length });
   });
   // Convert logits to probabilities and class names.
   const classes = await getClasses(logits as tf.Tensor<tf.Rank>);
