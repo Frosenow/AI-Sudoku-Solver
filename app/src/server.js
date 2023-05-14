@@ -2,7 +2,7 @@ const express = require("express");
 const fs = require("fs");
 const canvas = require("canvas");
 const bodyParser = require("body-parser");
-const { processor } = require("../dist/imageProcessor");
+const { processor } = require("../dist/imageProcessing/imageProcessor");
 
 // Default setup
 const app = express();

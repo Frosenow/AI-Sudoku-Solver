@@ -1,5 +1,3 @@
-import ImageInterface from "./ImageInterface";
-import boxBlur from "./boxblur";
 import convertToGrayscale from "./greyscale";
 import adaptiveThreshold from "./adaptiveThreshold";
 import { getLargestBlob } from "./largestObjectLocalisation";
@@ -9,6 +7,8 @@ import { homographicTransform } from "./homographicTransform";
 import createGridLines from "./createGridLines";
 import getTransformedSquares from "./getTransformedSquares";
 import { SudokuBox, extractSudokuBoxes } from "./extractBoxes";
+import fillInPrediction from "../digitsRecognition/predictDigits";
+import * as tf from "@tensorflow/tfjs-node";
 
 export async function processor(imageObject: ImageData): Promise<void> {
   const grayscaleImg = await convertToGrayscale(imageObject);
@@ -55,10 +55,11 @@ export async function processor(imageObject: ImageData): Promise<void> {
         extractedThresholdImage
       );
 
+      await fillInPrediction(boxes);
       boxes.forEach((box: SudokuBox, idx: number) => {
         box.numberImage.saveImageLocally(
           box.numberImage.toImageData().data,
-          `./digits/test${idx}.png`
+          `./digits/digit${idx}-number${box.contents}.png`
         );
       });
     }

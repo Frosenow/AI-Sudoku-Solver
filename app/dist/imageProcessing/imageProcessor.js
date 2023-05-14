@@ -13,6 +13,7 @@ const homographicTransform_1 = require("./homographicTransform");
 const createGridLines_1 = __importDefault(require("./createGridLines"));
 const getTransformedSquares_1 = __importDefault(require("./getTransformedSquares"));
 const extractBoxes_1 = require("./extractBoxes");
+const predictDigits_1 = __importDefault(require("../digitsRecognition/predictDigits"));
 async function processor(imageObject) {
     const grayscaleImg = await (0, greyscale_1.default)(imageObject);
     const thresholded = (0, adaptiveThreshold_1.default)(grayscaleImg, 20, 20);
@@ -35,8 +36,9 @@ async function processor(imageObject) {
             const extractedGrayscaleImage = (0, getTransformedSquares_1.default)(grayscaleImg, PROCESSING_SIZE, transform, "greyscaleExtracted.png");
             const extractedThresholdImage = (0, getTransformedSquares_1.default)(thresholded, PROCESSING_SIZE, transform, "thresholdExtracted.png");
             const boxes = (0, extractBoxes_1.extractSudokuBoxes)(extractedGrayscaleImage, extractedThresholdImage);
+            await (0, predictDigits_1.default)(boxes);
             boxes.forEach((box, idx) => {
-                box.numberImage.saveImageLocally(box.numberImage.toImageData().data, `./digits/test${idx}.png`);
+                box.numberImage.saveImageLocally(box.numberImage.toImageData().data, `./digits/digit${idx}-number${box.contents}.png`);
             });
         }
     }
