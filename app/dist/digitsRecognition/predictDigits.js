@@ -24,12 +24,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getClasses = void 0;
-const tf = __importStar(require("@tensorflow/tfjs-node"));
-const { createCanvas } = require("canvas");
-const fs = require("fs");
-const Jimp = require("jimp");
-const MODEL_URL = tf.io.fileSystem("./tfjs_model/model.json");
-const folderPath = "./results/digits";
+const tfn = __importStar(require("@tensorflow/tfjs-node"));
+const tf = __importStar(require("@tensorflow/tfjs"));
+const MODEL_URL = tfn.io.fileSystem("./tfjs_model/model.json");
 const CLASSES = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const IMAGE_SIZE = 20;
 let _model = undefined;
@@ -57,45 +54,33 @@ async function getClasses(logits) {
 exports.getClasses = getClasses;
 async function fillInPrediction(boxes) {
     const model = await loadModel();
-    readGrayscaleImages(folderPath).then((boxesArr) => {
-        boxesArr.forEach((box) => {
-            const canvas = createCanvas(box.width, box.height);
-            const ctx = canvas.getContext("2d");
-            const imageDataObj = ctx.createImageData(box.width, box.height);
-            imageDataObj.data.set(box.data);
+    const logits = tf.tidy(() => {
+        // convert the images into tensors
+        const images = boxes.map((box) => {
+            const imageObj = box.numberImage.toImageData();
+            const pixelData = new Uint8Array(imageObj.data);
+            const width = imageObj.width;
+            const height = imageObj.height;
             const img = tf.browser
-                .fromPixels(imageDataObj, 1)
+                .fromPixels({ data: pixelData, width, height }, 1)
                 .resizeBilinear([IMAGE_SIZE, IMAGE_SIZE])
                 .toFloat();
+            const mean = img.mean();
+            const std = tf.moments(img).variance.sqrt();
+            const normalized = img.sub(mean).div(std);
+            const batched = normalized.reshape([1, IMAGE_SIZE, IMAGE_SIZE, 1]);
+            return batched;
+        });
+        const input = tf.concat(images);
+        // Make the predictions
+        return model.predict(input, {
+            batchSize: boxes.length,
         });
     });
+    // Convert logits to probabilities and class names.
+    const classes = await getClasses(logits);
+    // fill in the boxes with the results
+    classes.forEach((className, index) => (boxes[index].contents = className));
 }
 exports.default = fillInPrediction;
-async function readGrayscaleImages(folderPath) {
-    return new Promise((resolve, reject) => {
-        fs.readdir(folderPath, async (err, files) => {
-            if (err) {
-                reject(`Error reading folder ${folderPath}: ${err}`);
-                return;
-            }
-            const imageDataArray = [];
-            for (const file of files) {
-                const filePath = `${folderPath}/${file}`;
-                try {
-                    const image = await Jimp.read(filePath);
-                    const imageData = {
-                        data: image.bitmap.data,
-                        width: image.bitmap.width,
-                        height: image.bitmap.height,
-                    };
-                    imageDataArray.push(imageData);
-                }
-                catch (err) {
-                    reject(`Error reading image ${filePath}: ${err}`);
-                }
-            }
-            resolve(imageDataArray);
-        });
-    });
-}
 //# sourceMappingURL=predictDigits.js.map

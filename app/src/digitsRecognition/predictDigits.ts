@@ -1,11 +1,7 @@
-import * as tf from "@tensorflow/tfjs-node";
+import * as tfn from "@tensorflow/tfjs-node";
+import * as tf from "@tensorflow/tfjs";
 import { SudokuBox } from "../imageProcessing/extractBoxes";
-const { createCanvas } = require("canvas");
-const fs = require("fs");
-const Jimp = require("jimp");
-
-const MODEL_URL = tf.io.fileSystem("./tfjs_model/model.json");
-const folderPath = "./results/digits";
+const MODEL_URL = tfn.io.fileSystem("./tfjs_model/model.json");
 
 const CLASSES = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const IMAGE_SIZE = 20;
@@ -36,48 +32,32 @@ export async function getClasses(logits: tf.Tensor<tf.Rank>) {
 
 export default async function fillInPrediction(boxes: SudokuBox[]) {
   const model = await loadModel();
-  readGrayscaleImages(folderPath).then((boxesArr: any) => {
-    boxesArr.forEach((box: ImageData) => {
-      const canvas = createCanvas(box.width, box.height);
-      const ctx = canvas.getContext("2d");
-      const imageDataObj = ctx.createImageData(box.width, box.height);
-      imageDataObj.data.set(box.data);
+  const logits = tf.tidy(() => {
+    // convert the images into tensors
+    const images = boxes.map((box) => {
+      const imageObj = box.numberImage.toImageData();
+      const pixelData = new Uint8Array(imageObj.data);
+      const width = imageObj.width;
+      const height = imageObj.height;
 
       const img = tf.browser
-        .fromPixels(imageDataObj, 1)
+        .fromPixels({ data: pixelData, width, height }, 1)
         .resizeBilinear([IMAGE_SIZE, IMAGE_SIZE])
         .toFloat();
+      const mean = img.mean();
+      const std = tf.moments(img).variance.sqrt();
+      const normalized = img.sub(mean).div(std);
+      const batched = normalized.reshape([1, IMAGE_SIZE, IMAGE_SIZE, 1]);
+      return batched;
+    });
+    const input = tf.concat(images);
+    // Make the predictions
+    return model.predict(input, {
+      batchSize: boxes.length,
     });
   });
-}
-
-async function readGrayscaleImages(folderPath: string) {
-  return new Promise((resolve, reject) => {
-    fs.readdir(folderPath, async (err: any, files: string[]) => {
-      if (err) {
-        reject(`Error reading folder ${folderPath}: ${err}`);
-        return;
-      }
-
-      const imageDataArray = [];
-
-      for (const file of files) {
-        const filePath = `${folderPath}/${file}`;
-
-        try {
-          const image = await Jimp.read(filePath);
-          const imageData = {
-            data: image.bitmap.data,
-            width: image.bitmap.width,
-            height: image.bitmap.height,
-          };
-          imageDataArray.push(imageData);
-        } catch (err) {
-          reject(`Error reading image ${filePath}: ${err}`);
-        }
-      }
-
-      resolve(imageDataArray);
-    });
-  });
+  // Convert logits to probabilities and class names.
+  const classes = await getClasses(logits as tf.Tensor<tf.Rank>);
+  // fill in the boxes with the results
+  classes.forEach((className, index) => (boxes[index].contents = className));
 }

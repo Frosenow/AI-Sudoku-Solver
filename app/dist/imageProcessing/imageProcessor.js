@@ -34,10 +34,10 @@ async function processor(imageObject) {
             const extractedGrayscaleImage = (0, getTransformedSquares_1.default)(grayscaleImg, PROCESSING_SIZE, transform, "greyscaleExtracted.png");
             const extractedThresholdImage = (0, getTransformedSquares_1.default)(thresholded, PROCESSING_SIZE, transform, "thresholdExtracted.png");
             const boxes = (0, extractBoxes_1.extractSudokuBoxes)(extractedGrayscaleImage, extractedThresholdImage);
-            boxes.forEach((box, idx) => {
-                box.numberImage.saveImageLocally(box.numberImage.toImageData().data, `./digits/digit${idx}.png`);
-            });
             await (0, predictDigits_1.default)(boxes);
+            boxes.forEach((box, idx) => {
+                box.numberImage.saveImageLocally(box.numberImage.toImageData().data, `./digits/digit${idx}-predicted${box.contents}.png`);
+            });
         }
     }
     else {

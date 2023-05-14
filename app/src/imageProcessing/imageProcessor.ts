@@ -52,14 +52,14 @@ export async function processor(imageObject: ImageData): Promise<void> {
         extractedThresholdImage
       );
 
+      await fillInPrediction(boxes);
+
       boxes.forEach((box: SudokuBox, idx: number) => {
         box.numberImage.saveImageLocally(
           box.numberImage.toImageData().data,
-          `./digits/digit${idx}.png`
+          `./digits/digit${idx}-predicted${box.contents}.png`
         );
       });
-
-      await fillInPrediction(boxes);
     }
   } else {
     console.log("Largest Blob not found");
