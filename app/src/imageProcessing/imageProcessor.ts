@@ -53,7 +53,6 @@ export async function processor(imageObject: ImageData): Promise<void> {
       );
 
       await fillInPrediction(boxes);
-
       boxes.forEach((box: SudokuBox, idx: number) => {
         box.numberImage.saveImageLocally(
           box.numberImage.toImageData().data,
