@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 // Find the point in the region that is closest to that corner in terms of Manhattan distance
 function getClosestPoint(points, x, y) {
     let closest = points[0];
@@ -19,7 +17,7 @@ function getClosestPoint(points, x, y) {
     return closest;
 }
 // Find corner points of a blob
-function getCornersCords(area) {
+export default function getCornersCords(area) {
     const { x: minX, y: minY } = area.bounds.topLeft;
     const { x: maxX, y: maxY } = area.bounds.bottomRight;
     const { points } = area;
@@ -31,5 +29,4 @@ function getCornersCords(area) {
         bottomRight: getClosestPoint(points, maxX, maxY),
     };
 }
-exports.default = getCornersCords;
 //# sourceMappingURL=cornerDetection.js.map

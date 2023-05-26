@@ -1,10 +1,5 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const ImageInterface_1 = __importDefault(require("./ImageInterface"));
-async function convertToGrayscale(imageData) {
+import ImageInterface from "./ImageInterface.js";
+export default async function convertToGrayscale(imageData) {
     const data = imageData.data;
     const width = imageData.width;
     const height = imageData.height;
@@ -20,11 +15,10 @@ async function convertToGrayscale(imageData) {
             bytes[row + x] = g;
         }
     }
-    const output = new ImageInterface_1.default(bytes, width, height);
+    const output = new ImageInterface(bytes, width, height);
     // Saving image for demonstration purpouse
     const outputImgData = output.toImageData();
     output.saveImageLocally(outputImgData.data, "greyscaleImage.png");
     return output;
 }
-exports.default = convertToGrayscale;
 //# sourceMappingURL=greyscale.js.map

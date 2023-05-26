@@ -1,15 +1,15 @@
-import convertToGrayscale from "./greyscale";
-import adaptiveThreshold from "./adaptiveThreshold";
-import { getLargestBlob } from "./largestObjectLocalisation";
-import getCornersCords from "./cornerDetection";
-import sanityCheck from "./sanityCheck";
-import { homographicTransform } from "./homographicTransform";
-import createGridLines from "./createGridLines";
-import getTransformedSquares from "./getTransformedSquares";
-import { SudokuBox, extractSudokuBoxes } from "./extractBoxes";
-import fillInPrediction from "../digitsRecognition/predictDigits";
+import convertToGrayscale from "./greyscale.js";
+import adaptiveThreshold from "./adaptiveThreshold.js";
+import { getLargestBlob } from "./largestObjectLocalisation.js";
+import getCornersCords from "./cornerDetection.js";
+import sanityCheck from "./sanityCheck.js";
+import { homographicTransform } from "./homographicTransform.js";
+import createGridLines from "./createGridLines.js";
+import getTransformedSquares from "./getTransformedSquares.js";
+import { SudokuBox, extractSudokuBoxes } from "./extractBoxes.js";
+import fillInPrediction from "../digitsRecognition/predictDigits.js";
 
-export async function processor(imageObject: ImageData): Promise<void> {
+export default async function processor(imageObject: ImageData): Promise<void> {
   const grayscaleImg = await convertToGrayscale(imageObject);
   const thresholded = adaptiveThreshold(grayscaleImg, 20, 20);
   const largestBlob = getLargestBlob(thresholded, {

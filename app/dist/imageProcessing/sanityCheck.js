@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-function sanityCheck({ topLeft, topRight, bottomLeft, bottomRight, }) {
+export default function sanityCheck({ topLeft, topRight, bottomLeft, bottomRight, }) {
     // Helper function to calculate four sides of quadrilateral
     const calculateLength = (Point1, Point2) => {
         const dx = Point1.x - Point2.x;
@@ -18,5 +16,4 @@ function sanityCheck({ topLeft, topRight, bottomLeft, bottomRight, }) {
         isWithinRange(leftLength / rightLength, [0.7, 1.3]) &&
         isWithinRange(leftLength / bottomLength, [0.5, 1.5]));
 }
-exports.default = sanityCheck;
 //# sourceMappingURL=sanityCheck.js.map

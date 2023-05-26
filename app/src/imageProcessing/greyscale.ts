@@ -1,4 +1,4 @@
-import ImageInterface from "./ImageInterface";
+import ImageInterface from "./ImageInterface.js";
 
 export default async function convertToGrayscale(
   imageData: ImageData

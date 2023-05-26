@@ -1,30 +1,4 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.transformPoint = exports.homographicTransform = void 0;
-const math = __importStar(require("mathjs"));
+import * as math from "mathjs";
 function homographicTransform(size, corners) {
     // Create an 8x8 matrix with all elements set to 0
     const A = math.zeros(8, 8);
@@ -88,7 +62,6 @@ function homographicTransform(size, corners) {
     // Return an object containing the individual values of the unknowns.
     return { a, b, c, d, e, f, g, h };
 }
-exports.homographicTransform = homographicTransform;
 // Define the transformPoint function which takes a point and a transform object
 function transformPoint(point, transform) {
     const { a, b, c, d, e, f, g, h } = transform;
@@ -100,5 +73,5 @@ function transformPoint(point, transform) {
     // Return the transformed point as an object with x and y properties
     return { x: sx, y: sy };
 }
-exports.transformPoint = transformPoint;
+export { homographicTransform, transformPoint };
 //# sourceMappingURL=homographicTransform.js.map

@@ -1,8 +1,8 @@
-const express = require("express");
-const fs = require("fs");
-const canvas = require("canvas");
-const bodyParser = require("body-parser");
-const { processor } = require("../dist/imageProcessing/imageProcessor");
+import express from "express";
+import fs from "fs";
+import * as canvas from "canvas";
+import bodyParser from "body-parser";
+import processor from "../dist/imageProcessing/imageProcessor.js";
 
 // Default setup
 const app = express();
