@@ -1,4 +1,4 @@
-import { Point, Blob } from "./largestObjectLocalisation";
+import { Point, Blob } from "./largestObjectLocalisation.js";
 
 // Find the point in the region that is closest to that corner in terms of Manhattan distance
 function getClosestPoint(points: Point[], x: number, y: number) {

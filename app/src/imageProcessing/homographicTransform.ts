@@ -1,4 +1,4 @@
-import { Point } from "./largestObjectLocalisation";
+import { Point } from "./largestObjectLocalisation.js";
 import * as math from "mathjs";
 
 interface Transform {

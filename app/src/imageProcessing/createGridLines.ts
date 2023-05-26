@@ -1,4 +1,4 @@
-import { Transform, transformPoint } from "./homographicTransform";
+import { Transform, transformPoint } from "./homographicTransform.js";
 
 // Define a function named createGridLines that takes in a Transform object and a PROCESSING_SIZE number
 export default function createGridLines(

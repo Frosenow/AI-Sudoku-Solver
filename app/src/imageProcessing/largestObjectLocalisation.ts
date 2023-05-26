@@ -1,4 +1,4 @@
-import ImageInterface from "./ImageInterface";
+import ImageInterface from "./ImageInterface.js";
 
 // Helper class to find and localise the biggest blob
 class Blob {

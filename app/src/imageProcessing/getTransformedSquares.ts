@@ -1,5 +1,5 @@
-import ImageInterface from "./ImageInterface";
-import { Transform } from "./homographicTransform";
+import ImageInterface from "./ImageInterface.js";
+import { Transform } from "./homographicTransform.js";
 
 // This function applies an affine transformation to an input image and returns the resulting transformed image.
 // The function takes in four arguments:

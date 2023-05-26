@@ -1,4 +1,4 @@
-import { Point } from "./largestObjectLocalisation";
+import { Point } from "./largestObjectLocalisation.js";
 
 export default function sanityCheck({
   topLeft,

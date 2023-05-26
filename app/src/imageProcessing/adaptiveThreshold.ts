@@ -1,5 +1,5 @@
-import ImageInterface from "./ImageInterface";
-import boxBlur from "./boxblur";
+import ImageInterface from "./ImageInterface.js";
+import boxBlur from "./boxblur.js";
 
 // Binarization of an image using adaptive thresholding
 export default function adaptiveThreshold(

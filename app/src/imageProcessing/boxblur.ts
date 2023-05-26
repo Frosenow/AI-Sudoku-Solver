@@ -1,5 +1,5 @@
 // Code inspired by: https://github.com/atomic14/ar-browser-sudoku/blob/894478d78d01a302a9a50448a539ec4ce180eeea/app/src/augmentedReality/imageProcessing/boxBlur.ts
-import ImageInterface from "./ImageInterface";
+import ImageInterface from "./ImageInterface.js";
 
 // Precalculate sum of each pixel
 function precalculate(

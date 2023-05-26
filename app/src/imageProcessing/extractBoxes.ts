@@ -1,5 +1,5 @@
-import ImageInterface from "./ImageInterface";
-import { findBlob } from "./largestObjectLocalisation";
+import ImageInterface from "./ImageInterface.js";
+import { findBlob } from "./largestObjectLocalisation.js";
 
 // Define the interface for each box in the Sudoku grid
 interface SudokuBox {
