@@ -1,6 +1,5 @@
 import path from "path";
 import * as canvas from "canvas";
-import { ImageData } from "canvas";
 import fs from "fs";
 export default class ImageInterface {
   constructor(bytes, width, height) {
@@ -65,7 +64,7 @@ export default class ImageInterface {
     stream.pipe(out);
   }
   toImageData() {
-    const imageData = new ImageData(this.width, this.height);
+    const imageData = new canvas.ImageData(this.width, this.height);
     for (let y = 0; y < this.height; y++) {
       const row = y * this.width;
       for (let x = 0; x < this.width; x++) {
