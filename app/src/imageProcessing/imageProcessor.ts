@@ -7,9 +7,10 @@ import { homographicTransform } from "./homographicTransform.js";
 import createGridLines from "./createGridLines.js";
 import getTransformedSquares from "./getTransformedSquares.js";
 import { SudokuBox, extractSudokuBoxes } from "./extractBoxes.js";
-import fillInPrediction from "../digitsRecognition/predictDigits.js";
 
-export default async function processor(imageObject: ImageData): Promise<void> {
+export default async function processor(
+  imageObject: ImageData
+): Promise<SudokuBox[] | undefined> {
   const grayscaleImg = await convertToGrayscale(imageObject);
   const thresholded = adaptiveThreshold(grayscaleImg, 20, 20);
   const largestBlob = getLargestBlob(thresholded, {
@@ -51,16 +52,16 @@ export default async function processor(imageObject: ImageData): Promise<void> {
         extractedGrayscaleImage,
         extractedThresholdImage
       );
-
-      await fillInPrediction(boxes);
       boxes.forEach((box: SudokuBox, idx: number) => {
         box.numberImage.saveImageLocally(
           box.numberImage.toImageData().data,
-          `./digits/digit${idx}-predicted${box.contents}.png`
+          `./digits/digit${idx}.png`
         );
       });
+      return boxes;
     }
   } else {
     console.log("Largest Blob not found");
+    return undefined;
   }
 }

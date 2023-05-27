@@ -7,7 +7,6 @@ import { homographicTransform } from "./homographicTransform.js";
 import createGridLines from "./createGridLines.js";
 import getTransformedSquares from "./getTransformedSquares.js";
 import { extractSudokuBoxes } from "./extractBoxes.js";
-import fillInPrediction from "../digitsRecognition/predictDigits.js";
 export default async function processor(imageObject) {
     const grayscaleImg = await convertToGrayscale(imageObject);
     const thresholded = adaptiveThreshold(grayscaleImg, 20, 20);
@@ -28,14 +27,15 @@ export default async function processor(imageObject) {
             const extractedGrayscaleImage = getTransformedSquares(grayscaleImg, PROCESSING_SIZE, transform, "greyscaleExtracted.png");
             const extractedThresholdImage = getTransformedSquares(thresholded, PROCESSING_SIZE, transform, "thresholdExtracted.png");
             const boxes = extractSudokuBoxes(extractedGrayscaleImage, extractedThresholdImage);
-            await fillInPrediction(boxes);
             boxes.forEach((box, idx) => {
-                box.numberImage.saveImageLocally(box.numberImage.toImageData().data, `./digits/digit${idx}-predicted${box.contents}.png`);
+                box.numberImage.saveImageLocally(box.numberImage.toImageData().data, `./digits/digit${idx}.png`);
             });
+            return boxes;
         }
     }
     else {
         console.log("Largest Blob not found");
+        return undefined;
     }
 }
 //# sourceMappingURL=imageProcessor.js.map

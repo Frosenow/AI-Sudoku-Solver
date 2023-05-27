@@ -44,5 +44,6 @@ app.post("/uploads", async (req, res) => {
   };
 
   // Run image processing algorithms
-  processor(imageObject);
+  const sudokuBoxes = await processor(imageObject);
+  res.json(sudokuBoxes);
 });

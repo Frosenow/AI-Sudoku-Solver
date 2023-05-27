@@ -30,9 +30,13 @@ function uploadImage() {
         "Content-Type": "application/json",
       },
     })
-      .then((response) => {
-        // Handle response
-        return response.blob();
+      .then((response) => response.json())
+      .then((data) => {
+        data.forEach((obj) => {
+          const bytes = Object.values(obj.numberImage.bytes);
+          const bytesArray = Uint8ClampedArray.from(bytes);
+          obj.numberImage.bytes = bytesArray;
+        });
       })
       .catch((error) => {
         console.error(error);
