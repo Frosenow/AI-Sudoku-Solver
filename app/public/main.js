@@ -46,20 +46,22 @@ function uploadImage() {
             obj.numberImage.height
           );
         });
+        // Get the predictions
         await fillInPrediction(data);
+
+        // Get the container for the predictions
         const targetElement = document.getElementById("canvas-container");
         data.forEach((canvas) => {
           const container = document.createElement("div");
-          // Step 3: Create label element
+          // Create label element
           const label = document.createElement("p");
           label.textContent = `Canvas ${canvas.contents}`;
 
-          // Step 4: Append label and canvas elements to container
+          // Append label and canvas elements to container
           container.appendChild(label);
           container.appendChild(canvas.imageData.data);
 
-          // Step 5: Add container element to the desired location in your HTML document
-
+          // Add container element to the desired location in your HTML document
           targetElement.appendChild(container);
         });
       })
@@ -80,10 +82,7 @@ async function loadModel() {
 }
 loadModel().then(() => console.log("Model Loaded", console.error));
 
-/**
- * Work out what the class should be from the results of the neural network prediction
- * @param logits
- */
+// Work out what the class should be from the results of the neural network prediction
 export async function getClasses(logits) {
   const logitsArray = await logits.array();
   const classes = logitsArray.map((values) => {
@@ -100,14 +99,10 @@ export async function getClasses(logits) {
   return classes;
 }
 
-/**
- * Apply our neural network to the extracted images
- * @param boxes A set of puzzle boxes containing images
- */
 export default async function fillInPrediction(boxes) {
   const model = await loadModel();
   const logits = tf.tidy(() => {
-    // convert the images into tensors and process them in the same way we did during training
+    // Convert the images into tensors and process them in the same way we did during training
     // if you change the code in the training then update the code here
     const images = boxes.map((box) => {
       const img = tf.browser
@@ -120,7 +115,7 @@ export default async function fillInPrediction(boxes) {
       const batched = normalized.reshape([1, IMAGE_SIZE, IMAGE_SIZE, 1]);
       return batched;
     });
-    // concatentate all the images for processing all at once
+    // Concatentate all the images for processing all at once
     const input = tf.concat(images);
     // Make the predictions
     return model.predict(input, {
@@ -129,28 +124,28 @@ export default async function fillInPrediction(boxes) {
   });
   // Convert logits to probabilities and class names.
   const classes = await getClasses(logits);
-  // fill in the boxes with the results
+  // Fill in the boxes with the results
   classes.forEach((className, index) => (boxes[index].contents = className));
   console.log("DONE");
 }
 
 function convertArrayToCanvas(array, width, height) {
-  // Step 1: Create ImageData object
+  // Create ImageData object
   const imageData = new ImageData(array, width, height);
 
-  // Step 2: Create HTMLCanvasElement
+  // Create HTMLCanvasElement
   const canvas = document.createElement("canvas");
 
-  // Step 3: Set canvas dimensions
+  // Set canvas dimensions
   canvas.width = width;
   canvas.height = height;
 
-  // Step 4: Get 2D rendering context
+  // Get 2D rendering context
   const context = canvas.getContext("2d");
 
-  // Step 5: Draw ImageData on canvas
+  // Draw ImageData on canvas
   context.putImageData(imageData, 0, 0);
 
-  // Step 6: Return HTMLCanvasElement
+  // Return HTMLCanvasElement
   return canvas;
 }
