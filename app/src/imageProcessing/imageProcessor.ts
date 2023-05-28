@@ -58,6 +58,10 @@ export default async function processor(
           `./digits/digit${idx}.png`
         );
       });
+      boxes.map((box) => {
+        box["imageData"] = box.numberImage.toImageData();
+        console.log(box);
+      });
       return boxes;
     }
   } else {

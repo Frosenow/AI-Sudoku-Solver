@@ -60,6 +60,7 @@ function extractSudokuBoxes(grayscaleImage, thresholdedImage) {
                     maxY,
                     numberImage,
                     contents: 0,
+                    imageData: 0,
                 });
             }
         }

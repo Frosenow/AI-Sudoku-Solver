@@ -2,6 +2,7 @@ import { Image } from "canvas";
 import { Point, Blob } from "./largestObjectLocalisation.js";
 import { CornerPoints } from "./cornerDetection.js";
 import path from "path";
+import { ImageData } from "canvas";
 import * as canvas from "canvas";
 import fs from "fs";
 

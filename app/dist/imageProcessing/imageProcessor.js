@@ -30,6 +30,10 @@ export default async function processor(imageObject) {
             boxes.forEach((box, idx) => {
                 box.numberImage.saveImageLocally(box.numberImage.toImageData().data, `./digits/digit${idx}.png`);
             });
+            boxes.map((box) => {
+                box["imageData"] = box.numberImage.toImageData();
+                console.log(box);
+            });
             return boxes;
         }
     }

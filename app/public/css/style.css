@@ -1,5 +1,5 @@
 body {
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
 }
 
 h1 {
@@ -16,4 +16,15 @@ h1 {
 
 .container {
   text-align: center;
+}
+
+#canvas-container {
+  display: flex;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+#canvas-container > * {
+  margin: 0.5rem;
+  padding: 0.5rem;
 }

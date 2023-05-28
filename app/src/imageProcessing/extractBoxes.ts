@@ -11,6 +11,7 @@ interface SudokuBox {
   maxY: number;
   numberImage: ImageInterface;
   contents: number;
+  imageData: any;
 }
 
 // Function to extract each box from the Sudoku grid
@@ -96,6 +97,7 @@ function extractSudokuBoxes(
           maxY,
           numberImage,
           contents: 0,
+          imageData: 0,
         });
       }
     }
