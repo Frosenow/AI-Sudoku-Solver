@@ -1,8 +1,10 @@
 const uploader = document.querySelector("#upload-btn");
 const canvas = document.querySelector("#canvas");
 const ctx = canvas.getContext("2d");
+const { createWorker } = Tesseract;
 
 uploader.addEventListener("change", uploadImage);
+const predictedDigits = [];
 
 function uploadImage() {
   const image = uploader.files[0];
@@ -32,7 +34,7 @@ function uploadImage() {
     })
       .then((response) => response.json())
       .then(async (data) => {
-        data.forEach((obj) => {
+        for (const obj of data) {
           const bytes = Object.values(obj.numberImage.bytes);
           const bytesImageData = Object.values(obj.imageData.data);
 
@@ -45,16 +47,23 @@ function uploadImage() {
             obj.numberImage.width,
             obj.numberImage.height
           );
-        });
+
+          let output = await recognizeDigit(obj.imageData.data);
+          predictedDigits.push(output);
+        }
+        console.log(predictedDigits);
         // Get the predictions
         await fillInPrediction(data);
 
         // Get the container for the predictions
         const targetElement = document.getElementById("canvas-container");
-        data.forEach((canvas) => {
+        data.forEach((canvas, idx) => {
           const container = document.createElement("div");
           // Create label element
           const label = document.createElement("p");
+          if (canvas.contents !== predictedDigits[idx]) {
+            canvas.contents = predictedDigits[idx];
+          }
           label.textContent = `Canvas ${canvas.contents}`;
 
           // Append label and canvas elements to container
@@ -148,4 +157,18 @@ function convertArrayToCanvas(array, width, height) {
 
   // Return HTMLCanvasElement
   return canvas;
+}
+
+const worker = await createWorker();
+
+async function recognizeDigit(image) {
+  await worker.loadLanguage("eng");
+  await worker.initialize("eng");
+  await worker.setParameters({
+    tessedit_char_whitelist: "0123456789",
+  });
+  const {
+    data: { text },
+  } = await worker.recognize(image);
+  return parseInt(text.trim());
 }

@@ -32,7 +32,6 @@ export default async function processor(imageObject) {
             });
             boxes.map((box) => {
                 box["imageData"] = box.numberImage.toImageData();
-                console.log(box);
             });
             return boxes;
         }

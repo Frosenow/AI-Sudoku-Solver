@@ -60,8 +60,8 @@ export default async function processor(
       });
       boxes.map((box) => {
         box["imageData"] = box.numberImage.toImageData();
-        console.log(box);
       });
+
       return boxes;
     }
   } else {
