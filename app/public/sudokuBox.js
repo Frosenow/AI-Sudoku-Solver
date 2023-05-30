@@ -15,6 +15,7 @@ export default class SudokuBoard {
 
   addDigit(row, col, digit) {
     this.board[row][col] = digit;
+    this.renderSudokuGrid();
   }
 
   renderSudokuGrid() {
@@ -24,16 +25,22 @@ export default class SudokuBoard {
     for (let row = 0; row < this.board.length; row++) {
       for (let col = 0; col < this.board[row].length; col++) {
         const cellValue = this.board[row][col];
-        const cell = document.createElement("div");
+        const cell = document.createElement("input");
+        cell.type = "number";
         cell.classList.add("sudoku-cell");
-        if (cellValue === 0) {
-          cell.classList.add("editable");
-        }
-        cell.textContent = cellValue !== 0 ? cellValue : "";
+        cell.value = cellValue !== 0 ? cellValue : "";
         cell.id = `cell-${row}-${col}`; // Add the ID to the cell
-        cell.addEventListener("click", () => this.selectCell(row, col));
+        cell.addEventListener("input", () => this.handleCellInput(row, col));
         sudokuGrid.appendChild(cell);
       }
+    }
+  }
+
+  handleCellInput(row, col) {
+    const cell = document.getElementById(`cell-${row}-${col}`);
+    const digit = parseInt(cell.value);
+    if (!isNaN(digit)) {
+      this.addDigit(row, col, digit);
     }
   }
 

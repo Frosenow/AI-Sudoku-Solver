@@ -116,16 +116,27 @@ body {
   justify-content: center;
   font-size: 24px;
   font-weight: bold;
+  width: 40px; /* Set the width to the same value as height */
   height: 40px;
   cursor: pointer;
   background-color: #d8d8d8;
   transition: background-color 0.2s ease;
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
+  border: none; /* Remove the default border */
+  padding: 0; /* Remove any padding */
+  margin: 0; /* Remove any margin */
+  outline: none; /* Remove the default outline */
+  -moz-appearance: textfield; /* Remove the scroll in Firefox */
+  text-align: center; /* Center the digit horizontally */
+  line-height: 40px; /* Center the digit vertically */
 }
 
-.editable {
-  background-color: #d8d8d8;
+.sudoku-cell::-webkit-inner-spin-button,
+.sudoku-cell::-webkit-outer-spin-button {
+  -webkit-appearance: none; /* Remove the spin button in Chrome and Safari */
+  margin: 0; /* Remove any margin */
+  -moz-appearance: none; /* Remove the spin button in Firefox */
 }
 
 .selected {
