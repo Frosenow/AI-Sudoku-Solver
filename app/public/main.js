@@ -7,12 +7,17 @@ import SudokuBoard from "./sudokuBox.js";
 // DOM Element to display extracted sudoku digits
 const sudokuGrid = document.getElementById("sudoku-grid");
 const photoContainer = document.querySelector(".card");
+const solveBtn = document.querySelector(".solve-button");
 
+solveBtn.addEventListener("click", solveSudoku);
 uploader.addEventListener("change", uploadImage);
-const predictedDigits = [];
+let predictedDigits = [];
 
 function uploadImage() {
+  sudokuGrid.style.display = "none";
+  solveBtn.style.display = "none";
   photoContainer.style.display = "block";
+  predictedDigits = [];
   const image = uploader.files[0];
   const imgObj = new Image();
 
@@ -52,6 +57,7 @@ function uploadImage() {
         // Get the predictions
         await fillInPrediction(data);
         sudokuGrid.style.display = "grid";
+        solveBtn.style.display = "block";
         // Double check the predictions
         data.forEach((canvas, idx) => {
           if (canvas.contents !== predictedDigits[idx]) {
@@ -59,7 +65,7 @@ function uploadImage() {
           }
 
           // Setting the know values
-          if (canvas.contents !== 0) {
+          if (canvas.contents !== 0 && !isNaN(canvas.contents)) {
             sudokuBoard.addDigit(canvas.y, canvas.x, canvas.contents);
           }
         });
@@ -181,4 +187,8 @@ function parseImageData(obj) {
     obj.numberImage.width,
     obj.numberImage.height
   );
+}
+
+function solveSudoku() {
+  console.log("Solving...");
 }

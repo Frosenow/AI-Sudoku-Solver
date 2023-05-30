@@ -39,16 +39,12 @@ export default class SudokuBoard {
   handleCellInput(row, col) {
     const cell = document.getElementById(`cell-${row}-${col}`);
     const digit = parseInt(cell.value);
-    if (!isNaN(digit)) {
+    if (!isNaN(digit) && digit >= 1 && digit <= 9) {
       this.addDigit(row, col, digit);
+    } else {
+      this.addDigit(row, col, 0);
     }
-  }
-
-  selectCell(row, col) {
-    const cells = document.querySelectorAll(".sudoku-cell");
-    cells.forEach((cell) => cell.classList.remove("selected"));
-    const selectedCell = document.getElementById(`cell-${row}-${col}`);
-    selectedCell.classList.add("selected");
+    console.log(this.board);
   }
 
   toString() {
