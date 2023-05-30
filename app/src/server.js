@@ -25,6 +25,11 @@ app.get("/", (req, res) => {
   res.render("index.ejs");
 });
 
+// Routing to about page
+app.get("/about.ejs", (req, res) => {
+  res.render("about.ejs");
+});
+
 // Handle the image upload
 app.post("/uploads", async (req, res) => {
   // Deconstruct image data

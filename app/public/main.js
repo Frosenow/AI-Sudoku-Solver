@@ -4,10 +4,15 @@ const ctx = canvas.getContext("2d");
 const { createWorker, PSM } = Tesseract;
 import SudokuBoard from "./sudokuBox.js";
 
+// DOM Element to display extracted sudoku digits
+const sudokuGrid = document.getElementById("sudoku-grid");
+const photoContainer = document.querySelector(".card");
+
 uploader.addEventListener("change", uploadImage);
 const predictedDigits = [];
 
 function uploadImage() {
+  photoContainer.style.display = "block";
   const image = uploader.files[0];
   const imgObj = new Image();
 
@@ -21,6 +26,7 @@ function uploadImage() {
     ctx.drawImage(imgObj, 0, 0, canvas.width, canvas.height);
     const dataURL = canvas.toDataURL("image/png");
 
+    canvas.style.display = "block";
     // Send encoded image to server
     fetch("/uploads", {
       method: "POST",
@@ -45,24 +51,12 @@ function uploadImage() {
 
         // Get the predictions
         await fillInPrediction(data);
-
-        // Get the container for the predictions
-        const targetElement = document.getElementById("canvas-container");
+        sudokuGrid.style.display = "grid";
+        // Double check the predictions
         data.forEach((canvas, idx) => {
-          const container = document.createElement("div");
-          // Create label element
-          const label = document.createElement("p");
           if (canvas.contents !== predictedDigits[idx]) {
             canvas.contents = predictedDigits[idx];
           }
-          label.textContent = `${canvas.contents}`;
-
-          // Append label and canvas elements to container
-          container.appendChild(label);
-          container.appendChild(canvas.imageData.data);
-
-          // Add container element to the desired location in your HTML document
-          targetElement.appendChild(container);
 
           // Setting the know values
           if (canvas.contents !== 0) {
@@ -70,6 +64,8 @@ function uploadImage() {
           }
         });
         console.log(sudokuBoard.toString());
+        console.log(sudokuBoard.board);
+        sudokuBoard.renderSudokuGrid();
       })
       .catch((error) => {
         console.error(error);
@@ -133,6 +129,7 @@ export default async function fillInPrediction(boxes) {
   // Fill in the boxes with the results
   classes.forEach((className, index) => (boxes[index].contents = className));
   console.log("DONE");
+  console.log(predictedDigits);
 }
 
 function convertArrayToCanvas(array, width, height) {

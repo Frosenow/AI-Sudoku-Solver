@@ -1,21 +1,87 @@
-body {
-  font-family: "Raleway", sans-serif;
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&display=swap");
+
+* {
+  box-sizing: border-box;
 }
 
-h1 {
-  color: rgba(121, 4, 231, 0.76);
+body {
+  background: radial-gradient(
+    circle at 0% 0%,
+    #ae8f48 0%,
+    #924b91 34%,
+    #9682da 65%,
+    #6a368d 100%
+  );
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
+}
+
+.navbar {
+  background: linear-gradient(90deg, #5b1978 0.87%, #9588de 100%);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  color: #f2f2f2;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  /* position: fixed;
+  width: 100%;*/
+}
+
+.logo {
+  padding: 20px;
+  font-family: "Montserrat";
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 78px;
+  text-align: left;
+  letter-spacing: 0.1em;
+  color: #ffffff;
+  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.card {
+  display: none;
+  margin: 1rem auto;
+  width: fit-content;
+  border-width: 1px;
+  border-color: rgba(219, 234, 254, 1);
+  border-radius: 1rem;
+  background-color: rgba(255, 255, 255, 1);
+  padding: 1rem;
 }
 
 #canvas {
-  display: block;
-  padding: 1rem;
-  width: 1280px;
-  height: 720px;
-  margin: 0 auto;
+  display: none;
+  position: relative;
+  width: 500px;
+  height: 500px;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.button {
+  top: 40px;
+  text-align: center;
+}
+
+#upload-btn {
+  left: 40px;
+  right: 40px;
+  background: #5b1978;
+  border-radius: 10px;
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 39px;
+  text-align: center;
+  color: #d9d7ce;
 }
 
 .container {
   text-align: center;
+  padding: 2rem;
 }
 
 #canvas-container {
@@ -27,4 +93,41 @@ h1 {
 #canvas-container > * {
   margin: 0.5rem;
   padding: 0.5rem;
+}
+
+/* SUDOKU TABLE  */
+
+#sudoku-grid {
+  display: none;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 0.5rem;
+  border: 1px solid black;
+  width: 500px;
+  height: 500px;
+  margin: 0.5rem auto;
+  background-color: #f2f2f2;
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.sudoku-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  height: 40px;
+  cursor: pointer;
+  background-color: #d8d8d8;
+  transition: background-color 0.2s ease;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+}
+
+.editable {
+  background-color: #d8d8d8;
+}
+
+.selected {
+  background-color: lightblue;
 }
