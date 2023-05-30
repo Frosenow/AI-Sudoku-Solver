@@ -1,7 +1,8 @@
 const uploader = document.querySelector("#upload-btn");
 const canvas = document.querySelector("#canvas");
 const ctx = canvas.getContext("2d");
-const { createWorker } = Tesseract;
+const { createWorker, PSM } = Tesseract;
+import SudokuBoard from "./sudokuBox.js";
 
 uploader.addEventListener("change", uploadImage);
 const predictedDigits = [];
@@ -34,24 +35,14 @@ function uploadImage() {
     })
       .then((response) => response.json())
       .then(async (data) => {
+        const sudokuBoard = new SudokuBoard();
+
         for (const obj of data) {
-          const bytes = Object.values(obj.numberImage.bytes);
-          const bytesImageData = Object.values(obj.imageData.data);
-
-          const imageDataArray = Uint8ClampedArray.from(bytesImageData);
-          const bytesArray = Uint8ClampedArray.from(bytes);
-
-          obj.numberImage.bytes = bytesArray;
-          obj.imageData.data = convertArrayToCanvas(
-            imageDataArray,
-            obj.numberImage.width,
-            obj.numberImage.height
-          );
-
+          parseImageData(obj);
           let output = await recognizeDigit(obj.imageData.data);
           predictedDigits.push(output);
         }
-        console.log(predictedDigits);
+
         // Get the predictions
         await fillInPrediction(data);
 
@@ -64,7 +55,7 @@ function uploadImage() {
           if (canvas.contents !== predictedDigits[idx]) {
             canvas.contents = predictedDigits[idx];
           }
-          label.textContent = `Canvas ${canvas.contents}`;
+          label.textContent = `${canvas.contents}`;
 
           // Append label and canvas elements to container
           container.appendChild(label);
@@ -72,7 +63,13 @@ function uploadImage() {
 
           // Add container element to the desired location in your HTML document
           targetElement.appendChild(container);
+
+          // Setting the know values
+          if (canvas.contents !== 0) {
+            sudokuBoard.addDigit(canvas.y, canvas.x, canvas.contents);
+          }
         });
+        console.log(sudokuBoard.toString());
       })
       .catch((error) => {
         console.error(error);
@@ -165,10 +162,26 @@ async function recognizeDigit(image) {
   await worker.loadLanguage("eng");
   await worker.initialize("eng");
   await worker.setParameters({
-    tessedit_char_whitelist: "0123456789",
+    tessedit_char_whitelist: "123456789",
+    tessedit_pageseg_mode: PSM.SINGLE_CHAR,
   });
   const {
     data: { text },
   } = await worker.recognize(image);
   return parseInt(text.trim());
+}
+
+function parseImageData(obj) {
+  const bytes = Object.values(obj.numberImage.bytes);
+  const bytesImageData = Object.values(obj.imageData.data);
+
+  const imageDataArray = Uint8ClampedArray.from(bytesImageData);
+  const bytesArray = Uint8ClampedArray.from(bytes);
+
+  obj.numberImage.bytes = bytesArray;
+  obj.imageData.data = convertArrayToCanvas(
+    imageDataArray,
+    obj.numberImage.width,
+    obj.numberImage.height
+  );
 }
