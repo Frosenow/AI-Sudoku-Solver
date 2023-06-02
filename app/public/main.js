@@ -3,6 +3,7 @@ const canvas = document.querySelector("#canvas");
 const ctx = canvas.getContext("2d");
 const { createWorker, PSM } = Tesseract;
 import SudokuBoard from "./sudokuBox.js";
+import sudokuSolver from "./sudokuSolver.js";
 
 // DOM Element to display extracted sudoku digits
 const sudokuGrid = document.getElementById("sudoku-grid");
@@ -11,7 +12,9 @@ const solveBtn = document.querySelector(".solve-button");
 
 solveBtn.addEventListener("click", solveSudoku);
 uploader.addEventListener("change", uploadImage);
+
 let predictedDigits = [];
+const sudokuBoard = new SudokuBoard();
 
 function uploadImage() {
   sudokuGrid.style.display = "none";
@@ -46,8 +49,6 @@ function uploadImage() {
     })
       .then((response) => response.json())
       .then(async (data) => {
-        const sudokuBoard = new SudokuBoard();
-
         for (const obj of data) {
           parseImageData(obj);
           let output = await recognizeDigit(obj.imageData.data);
@@ -70,7 +71,6 @@ function uploadImage() {
           }
         });
         console.log(sudokuBoard.toString());
-        console.log(sudokuBoard.board);
         sudokuBoard.renderSudokuGrid();
       })
       .catch((error) => {
@@ -134,8 +134,6 @@ export default async function fillInPrediction(boxes) {
   const classes = await getClasses(logits);
   // Fill in the boxes with the results
   classes.forEach((className, index) => (boxes[index].contents = className));
-  console.log("DONE");
-  console.log(predictedDigits);
 }
 
 function convertArrayToCanvas(array, width, height) {
@@ -189,6 +187,8 @@ function parseImageData(obj) {
   );
 }
 
-function solveSudoku() {
-  console.log("Solving...");
+async function solveSudoku() {
+  console.log("Presolved: ", sudokuBoard.board);
+  const solved = await sudokuSolver(sudokuBoard.board);
+  console.log(solved);
 }
