@@ -22,6 +22,8 @@ export default class SudokuBoard {
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
     ];
+    this.errorMessages = [];
+    this.isDisplayingErrorMessage = false;
   }
 
   addDigit(row, col, digit) {
@@ -148,7 +150,8 @@ export default class SudokuBoard {
       console.log("Sudoku puzzle solved!");
       this.renderSolvedSudokuGrid(); // Call the new method to render the solved Sudoku
     } else {
-      console.log("Unable to solve the Sudoku puzzle.");
+      const errorMessage = "Unable to solve the Sudoku puzzle";
+      this.displayErrorMessage(errorMessage);
     }
   }
 
@@ -262,16 +265,44 @@ export default class SudokuBoard {
     }
 
     if (invalidDigits.length > 0) {
-      console.log("Invalid digits found:");
+      const errorMessage = "Invalid digits found";
       invalidDigits.forEach(({ row, col, digit }) => {
-        console.log(`Digit ${digit} at row ${row} and column ${col}`);
+        // console.log(`Digit ${digit} at row ${row} and column ${col}`);
         const cell = document.getElementById(`cell-${row}-${col}`);
         cell.classList.add("invalid");
       });
+      this.displayErrorMessage(errorMessage);
       return false;
     } else {
       console.log("Sudoku board is valid.");
       return true;
+    }
+  }
+
+  displayErrorMessage(message, duration = 1000) {
+    const errorMessage = document.querySelector(".error-message");
+    this.errorMessages.push({ message, duration });
+    if (!this.isDisplayingErrorMessage) {
+      this.showNextErrorMessage();
+    }
+  }
+
+  showNextErrorMessage() {
+    const errorMessage = document.querySelector(".error-message");
+    if (this.errorMessages.length > 0) {
+      const { message, duration } = this.errorMessages.shift();
+      errorMessage.textContent = message.trim();
+      errorMessage.style.display = "block";
+      errorMessage.classList.add("show");
+      this.isDisplayingErrorMessage = true;
+      setTimeout(() => {
+        errorMessage.classList.remove("show");
+        setTimeout(() => {
+          errorMessage.style.display = "none";
+          this.isDisplayingErrorMessage = false;
+          this.showNextErrorMessage();
+        }, 500);
+      }, duration);
     }
   }
 }

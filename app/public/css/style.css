@@ -235,3 +235,31 @@ body {
   );
   transition: all 0.475s;
 }
+
+/* ERROR MESSAGE  */
+
+.error-message {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ff0000;
+  border: 2px solid rgb(165, 0, 0);
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: opacity 0.3s ease-in-out;
+  text-transform: uppercase;
+  font-family: "Montserrat", sans-serif;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  margin: 1rem 0;
+  z-index: 2;
+  text-align: center;
+}
+
+.error-message.show {
+  display: block;
+  opacity: 1;
+}
