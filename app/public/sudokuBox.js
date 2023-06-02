@@ -53,6 +53,8 @@ export default class SudokuBoard {
         sudokuGrid.appendChild(cell);
       }
     }
+
+    this.addGridLines();
   }
 
   renderSolvedSudokuGrid() {
@@ -77,6 +79,30 @@ export default class SudokuBoard {
         cell.addEventListener("input", () => this.handleCellInput(row, col));
         sudokuGrid.appendChild(cell);
       }
+    }
+
+    this.addGridLines();
+  }
+
+  addGridLines() {
+    const sudokuGrid = document.getElementById("sudoku-grid");
+
+    // Remove existing grid lines
+    const existingGridLines = sudokuGrid.querySelectorAll(".grid-line");
+    existingGridLines.forEach((line) => line.remove());
+
+    // Add horizontal grid lines
+    for (let i = 1; i < 3; i++) {
+      const line = document.createElement("div");
+      line.classList.add("grid-line", "horizontal-line", `line-${i}`);
+      sudokuGrid.appendChild(line);
+    }
+
+    // Add vertical grid lines
+    for (let i = 1; i < 3; i++) {
+      const line = document.createElement("div");
+      line.classList.add("grid-line", "vertical-line", `line-${i}`);
+      sudokuGrid.appendChild(line);
     }
   }
 

@@ -107,16 +107,17 @@ body {
 /* SUDOKU TABLE  */
 
 #sudoku-grid {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(9, 1fr);
   gap: 0.5rem;
-  border: 1px solid black;
   width: 532px;
   height: 532px;
   margin: 1rem auto;
   background-color: #f2f2f2;
   border-radius: 1rem;
   padding: 1rem;
+  overflow: hidden;
 }
 
 .sudoku-cell {
@@ -125,31 +126,64 @@ body {
   justify-content: center;
   font-size: 24px;
   font-weight: bold;
-  width: 40px; /* Set the width to the same value as height */
+  width: 40px;
   height: 40px;
   cursor: pointer;
   background-color: #d8d8d8;
   transition: background-color 0.2s ease;
   font-family: "Montserrat", sans-serif;
   font-weight: 700;
-  border: none; /* Remove the default border */
-  padding: 0; /* Remove any padding */
-  margin: 0; /* Remove any margin */
-  outline: none; /* Remove the default outline */
-  -moz-appearance: textfield; /* Remove the scroll in Firefox */
-  text-align: center; /* Center the digit horizontally */
-  line-height: 40px; /* Center the digit vertically */
+  border: none;
+  padding: 0;
+  margin: 0;
+  outline: none;
+  -moz-appearance: textfield;
+  text-align: center;
+  line-height: 40px;
 }
 
 .sudoku-cell::-webkit-inner-spin-button,
 .sudoku-cell::-webkit-outer-spin-button {
-  -webkit-appearance: none; /* Remove the spin button in Chrome and Safari */
-  margin: 0; /* Remove any margin */
-  -moz-appearance: none; /* Remove the spin button in Firefox */
+  -webkit-appearance: none;
+  margin: 0;
+  -moz-appearance: none;
 }
 
 .guess {
   color: green;
+}
+
+.grid-line {
+  position: absolute;
+  background-color: black;
+}
+
+.horizontal-line {
+  width: 100%;
+  height: 2px;
+  left: 0;
+}
+
+.vertical-line {
+  width: 2px;
+  height: 100%;
+  top: 0;
+}
+
+.horizontal-line.line-1 {
+  top: 33.3333%;
+}
+
+.horizontal-line.line-2 {
+  top: 65%;
+}
+
+.vertical-line.line-1 {
+  left: 33.3333%;
+}
+
+.vertical-line.line-2 {
+  left: 65%;
 }
 
 /* SOLVE BUTTON  */

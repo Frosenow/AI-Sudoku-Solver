@@ -18,8 +18,6 @@ let predictedDigits = [];
 const sudokuBoard = new SudokuBoard();
 
 function uploadImage() {
-  // sudokuGrid.style.display = "none";
-  // solveBtn.style.display = "none";
   photoContainer.style.display = "block";
   predictedDigits = [];
   const image = uploader.files[0];
@@ -58,8 +56,6 @@ function uploadImage() {
 
         // Get the predictions
         await fillInPrediction(data);
-        // sudokuGrid.style.display = "grid";
-        // solveBtn.style.display = "block";
         solutionContainer.style.display = "block";
         // Double check the predictions
         data.forEach((canvas, idx) => {
