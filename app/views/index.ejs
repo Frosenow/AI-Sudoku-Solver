@@ -13,17 +13,22 @@
       <div class="logo">SUDOKU SOLVER</div>
     </nav>
     <div class="container">
-      <div class="card">
-        <canvas id="canvas"></canvas>
+      <div class="card-container">
+        <div class="card">
+          <canvas id="canvas"></canvas>
+        </div>
+        <div class="button">
+          <input type="file" name="data" id="upload-btn" accept="image/*" />
+        </div>
       </div>
-      <div class="button">
-        <input type="file" name="data" id="upload-btn" accept="image/*" />
+      <div class="solution-container">
+        <div id="sudoku-grid"></div>
+        <button class="solve-button">
+          <span class="button-content">solve!</span>
+        </button>
       </div>
     </div>
-    <div id="sudoku-grid"></div>
-    <button class="solve-button">
-      <span class="button-content">solve!</span>
-    </button>
+
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.6.0/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
     <script type="module" src="main.js"></script>

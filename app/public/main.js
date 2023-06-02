@@ -9,6 +9,7 @@ import sudokuSolver from "./sudokuSolver.js";
 const sudokuGrid = document.getElementById("sudoku-grid");
 const photoContainer = document.querySelector(".card");
 const solveBtn = document.querySelector(".solve-button");
+const solutionContainer = document.querySelector(".solution-container");
 
 solveBtn.addEventListener("click", solveSudoku);
 uploader.addEventListener("change", uploadImage);
@@ -17,8 +18,8 @@ let predictedDigits = [];
 const sudokuBoard = new SudokuBoard();
 
 function uploadImage() {
-  sudokuGrid.style.display = "none";
-  solveBtn.style.display = "none";
+  // sudokuGrid.style.display = "none";
+  // solveBtn.style.display = "none";
   photoContainer.style.display = "block";
   predictedDigits = [];
   const image = uploader.files[0];
@@ -57,8 +58,9 @@ function uploadImage() {
 
         // Get the predictions
         await fillInPrediction(data);
-        sudokuGrid.style.display = "grid";
-        solveBtn.style.display = "block";
+        // sudokuGrid.style.display = "grid";
+        // solveBtn.style.display = "block";
+        solutionContainer.style.display = "block";
         // Double check the predictions
         data.forEach((canvas, idx) => {
           if (canvas.contents !== predictedDigits[idx]) {

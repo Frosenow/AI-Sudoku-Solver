@@ -80,8 +80,17 @@ body {
 }
 
 .container {
+  justify-content: space-around;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
   text-align: center;
   padding: 2rem;
+}
+
+.solution-container {
+  display: none;
 }
 
 #canvas-container {
@@ -98,13 +107,13 @@ body {
 /* SUDOKU TABLE  */
 
 #sudoku-grid {
-  display: none;
+  display: grid;
   grid-template-columns: repeat(9, 1fr);
   gap: 0.5rem;
   border: 1px solid black;
-  width: 500px;
-  height: 500px;
-  margin: 0.5rem auto;
+  width: 532px;
+  height: 532px;
+  margin: 1rem auto;
   background-color: #f2f2f2;
   border-radius: 1rem;
   padding: 1rem;
@@ -146,16 +155,16 @@ body {
 /* SOLVE BUTTON  */
 
 .solve-button {
+  width: 100%;
   position: relative;
   overflow: hidden;
   height: 3rem;
   padding: 0 2rem;
-  border-radius: 1.5rem;
+  border-radius: 10px;
   background: #3d3a4e;
   background-size: 400%;
   color: #fff;
   border: none;
-  display: none;
   margin: 0.2rem auto;
 }
 
