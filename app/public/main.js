@@ -3,7 +3,6 @@ const canvas = document.querySelector("#canvas");
 const ctx = canvas.getContext("2d");
 const { createWorker, PSM } = Tesseract;
 import SudokuBoard from "./sudokuBox.js";
-import sudokuSolver from "./sudokuSolver.js";
 
 // DOM Element to display extracted sudoku digits
 const sudokuGrid = document.getElementById("sudoku-grid");
@@ -186,5 +185,6 @@ function parseImageData(obj) {
 }
 
 async function solveSudoku() {
+  sudokuBoard.checkValidity();
   sudokuBoard.solve();
 }

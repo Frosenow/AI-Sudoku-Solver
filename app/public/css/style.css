@@ -114,7 +114,7 @@ body {
   width: 532px;
   height: 532px;
   margin: 1rem auto;
-  background-color: #f2f2f2;
+  background-color: #ffffff;
   border-radius: 1rem;
   padding: 1rem;
   overflow: hidden;
@@ -151,6 +151,10 @@ body {
 
 .guess {
   color: green;
+}
+
+.invalid {
+  color: red;
 }
 
 .grid-line {

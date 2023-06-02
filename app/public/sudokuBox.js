@@ -11,7 +11,6 @@ export default class SudokuBoard {
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
     ];
-
     this.copy = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -208,5 +207,71 @@ export default class SudokuBoard {
       }
     }
     return true;
+  }
+
+  checkValidity() {
+    const invalidDigits = [];
+
+    // Check rows for duplicates
+    for (let row = 0; row < this.board.length; row++) {
+      const rowDigits = new Set();
+      for (let col = 0; col < this.board[row].length; col++) {
+        const digit = this.board[row][col];
+        if (digit !== 0) {
+          if (rowDigits.has(digit)) {
+            invalidDigits.push({ row, col, digit });
+          } else {
+            rowDigits.add(digit);
+          }
+        }
+      }
+    }
+
+    // Check columns for duplicates
+    for (let col = 0; col < this.board[0].length; col++) {
+      const colDigits = new Set();
+      for (let row = 0; row < this.board.length; row++) {
+        const digit = this.board[row][col];
+        if (digit !== 0) {
+          if (colDigits.has(digit)) {
+            invalidDigits.push({ row, col, digit });
+          } else {
+            colDigits.add(digit);
+          }
+        }
+      }
+    }
+
+    // Check grids for duplicates
+    for (let startRow = 0; startRow < this.board.length; startRow += 3) {
+      for (let startCol = 0; startCol < this.board[0].length; startCol += 3) {
+        const gridDigits = new Set();
+        for (let row = startRow; row < startRow + 3; row++) {
+          for (let col = startCol; col < startCol + 3; col++) {
+            const digit = this.board[row][col];
+            if (digit !== 0) {
+              if (gridDigits.has(digit)) {
+                invalidDigits.push({ row, col, digit });
+              } else {
+                gridDigits.add(digit);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    if (invalidDigits.length > 0) {
+      console.log("Invalid digits found:");
+      invalidDigits.forEach(({ row, col, digit }) => {
+        console.log(`Digit ${digit} at row ${row} and column ${col}`);
+        const cell = document.getElementById(`cell-${row}-${col}`);
+        cell.classList.add("invalid");
+      });
+      return false;
+    } else {
+      console.log("Sudoku board is valid.");
+      return true;
+    }
   }
 }
