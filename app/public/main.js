@@ -188,7 +188,5 @@ function parseImageData(obj) {
 }
 
 async function solveSudoku() {
-  console.log("Presolved: ", sudokuBoard.board);
-  const solved = await sudokuSolver(sudokuBoard.board);
-  console.log(solved);
+  sudokuBoard.solve();
 }

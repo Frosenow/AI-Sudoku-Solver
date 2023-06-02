@@ -11,6 +11,18 @@ export default class SudokuBoard {
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0],
     ];
+
+    this.copy = [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ];
   }
 
   addDigit(row, col, digit) {
@@ -27,9 +39,41 @@ export default class SudokuBoard {
         const cellValue = this.board[row][col];
         const cell = document.createElement("input");
         cell.type = "number";
-        cell.classList.add("sudoku-cell");
+        cellValue === 0
+          ? cell.classList.add("sudoku-cell")
+          : cell.classList.add("sudoku-cell", "fixed");
+
+        if (!cell.classList.contains("fixed") && cellValue !== 0) {
+          cell.classList.add("guess");
+        }
+
         cell.value = cellValue !== 0 ? cellValue : "";
-        cell.id = `cell-${row}-${col}`; // Add the ID to the cell
+        cell.id = `cell-${row}-${col}`;
+        cell.addEventListener("input", () => this.handleCellInput(row, col));
+        sudokuGrid.appendChild(cell);
+      }
+    }
+  }
+
+  renderSolvedSudokuGrid() {
+    const sudokuGrid = document.getElementById("sudoku-grid");
+    sudokuGrid.innerHTML = "";
+
+    for (let row = 0; row < this.copy.length; row++) {
+      for (let col = 0; col < this.copy[row].length; col++) {
+        const cellValue = this.copy[row][col];
+        const originalCellValue = this.board[row][col];
+        const cell = document.createElement("input");
+        cell.type = "number";
+
+        if (cellValue !== originalCellValue) {
+          cell.classList.add("sudoku-cell", "guess");
+        } else {
+          cell.classList.add("sudoku-cell", "fixed");
+        }
+
+        cell.value = cellValue !== 0 ? cellValue : "";
+        cell.id = `cell-${row}-${col}`;
         cell.addEventListener("input", () => this.handleCellInput(row, col));
         sudokuGrid.appendChild(cell);
       }
@@ -66,5 +110,77 @@ export default class SudokuBoard {
     }
     output += "+-------+-------+-------+";
     return output;
+  }
+
+  solve() {
+    // Copy the board to the working copy
+    this.copy = this.board.map((row) => row.slice());
+
+    // Start solving the puzzle
+    const isSolved = this.solvePuzzle();
+
+    if (isSolved) {
+      console.log("Sudoku puzzle solved!");
+      this.renderSolvedSudokuGrid(); // Call the new method to render the solved Sudoku
+    } else {
+      console.log("Unable to solve the Sudoku puzzle.");
+    }
+  }
+
+  solvePuzzle() {
+    for (let row = 0; row < this.copy.length; row++) {
+      for (let col = 0; col < this.copy[row].length; col++) {
+        if (this.copy[row][col] === 0) {
+          for (let digit = 1; digit <= 9; digit++) {
+            if (this.isSafe(row, col, digit)) {
+              this.copy[row][col] = digit;
+              if (this.solvePuzzle()) {
+                return true;
+              }
+              this.copy[row][col] = 0;
+            }
+          }
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  isSafe(row, col, digit) {
+    return (
+      this.isRowSafe(row, digit) &&
+      this.isColumnSafe(col, digit) &&
+      this.isBoxSafe(row - (row % 3), col - (col % 3), digit)
+    );
+  }
+
+  isRowSafe(row, digit) {
+    for (let col = 0; col < this.copy[row].length; col++) {
+      if (this.copy[row][col] === digit) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  isColumnSafe(col, digit) {
+    for (let row = 0; row < this.copy.length; row++) {
+      if (this.copy[row][col] === digit) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  isBoxSafe(startRow, startCol, digit) {
+    for (let row = 0; row < 3; row++) {
+      for (let col = 0; col < 3; col++) {
+        if (this.copy[startRow + row][startCol + col] === digit) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 }
