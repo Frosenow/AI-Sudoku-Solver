@@ -9,6 +9,7 @@ const sudokuGrid = document.getElementById("sudoku-grid");
 const photoContainer = document.querySelector(".card");
 const solveBtn = document.querySelector(".solve-button");
 const solutionContainer = document.querySelector(".solution-container");
+const loadingSpinner = document.querySelector(".loader-container");
 
 solveBtn.addEventListener("click", solveSudoku);
 uploader.addEventListener("change", uploadImage);
@@ -18,6 +19,8 @@ const sudokuBoard = new SudokuBoard();
 
 function uploadImage() {
   photoContainer.style.display = "block";
+  loadingSpinner.style.display = "block";
+
   predictedDigits = [];
   const image = uploader.files[0];
   const imgObj = new Image();
@@ -67,6 +70,7 @@ function uploadImage() {
             sudokuBoard.addDigit(canvas.y, canvas.x, canvas.contents);
           }
         });
+        loadingSpinner.style.display = "none";
         console.log(sudokuBoard.toString());
         sudokuBoard.renderSudokuGrid();
       })

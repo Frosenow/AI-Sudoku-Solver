@@ -280,7 +280,6 @@ export default class SudokuBoard {
   }
 
   displayErrorMessage(message, duration = 1000) {
-    const errorMessage = document.querySelector(".error-message");
     this.errorMessages.push({ message, duration });
     if (!this.isDisplayingErrorMessage) {
       this.showNextErrorMessage();
