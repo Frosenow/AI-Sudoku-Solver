@@ -5,7 +5,10 @@ AI Sudoku Solver is a web application using image analysis algorithms and neural
 
 **Deployed site:** [AI Sudoku Solver](https://sudoku-solver-7785.onrender.com/)
 
-![Mockup of the site](https://github.com/Frosenow/Dictionary-Autocompletion-Using-Trie/assets/75395761/dfe061f6-0863-4ec5-8ad9-a2dee1480e5a)
+<div align="center">
+<img align="center" src="https://github.com/Frosenow/Dictionary-Autocompletion-Using-Trie/assets/75395761/dfe061f6-0863-4ec5-8ad9-a2dee1480e5a" alt="Mockup of the site" />
+</div>
+
 ## How it works?
 
 **1. Grayscale:** </br>
